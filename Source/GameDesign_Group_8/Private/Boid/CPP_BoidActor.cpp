@@ -35,7 +35,10 @@ void ACPP_BoidActor::BeginPlay()
     CurrentVector = GetActorForwardVector().GetSafeNormal() * MovementSpeed;
 
     float RandomDelay = FMath::FRandRange(0.0f, 0.1f);
+
+    //Populates target points
     
+    // Start obstacle avoidance timer
     GetWorld()->GetTimerManager().SetTimer(
          TimerHandle,
          this,
@@ -217,7 +220,7 @@ void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
         APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
         if (!PlayerPawn)
         {
-            return; // Exit the function as we can't follow the player.
+            return; 
         }
 
         FVector PlayerLocation = PlayerPawn->GetActorLocation();
@@ -275,8 +278,8 @@ void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
             RandomDir = FVector(
              FMath::FRand() * 2.0f - 1.0f,
              FMath::FRand() * 2.0f - 1.0f,
-             (FMath::FRand() * 2.0f - 1.0f) * 0.3f // Less vertical movement
-         ).GetSafeNormal(); 
+             (FMath::FRand() * 2.0f - 1.0f) * 0.3f
+             ).GetSafeNormal(); 
         }
         
         bIsChangingDirection = true;
@@ -300,16 +303,17 @@ void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
        ).GetSafeNormal();
     }
      
-    //Sets movement
+    //Slows fish down when approaching player
     if ((PlayerDistance < 500.0f) && bShouldFollowPlayer)
     {
         MovementSpeedFactor = FMath::GetMappedRangeValueClamped(
-        FVector2D(200.0f, 500.0f), // Input range: distance thresholds (clamped between 200 and 500)
-        FVector2D(0.0f, 1.0f),    // Output range: 0.0 speed factor (stop) at 200, full speed (1.0) at 500
-        PlayerDistance // Player's current distance evaluated within the range
-    );
-
+        FVector2D(200.0f, 500.0f), 
+        FVector2D(0.0f, 1.0f),    
+        PlayerDistance 
+        );
     }
+
+    //Set new movement vector
     CurrentVector = MovementDirection * MovementSpeed * MovementSpeedFactor;
 
     // Apply movement
@@ -324,82 +328,19 @@ void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
     }
 }
 
-//----NOT IN USE----
-void ACPP_BoidActor::KeepInBounds()
+void ACPP_BoidActor::FollowTargetPoint()
 {
-    // Only apply if boundary volume is set
-    if (!BoundaryVolume)
-        return;
-        
-    // Get boundary box extent and center
-    FVector BoxOrigin, BoxExtent;
-    BoundaryVolume->GetActorBounds(false, BoxOrigin, BoxExtent);
     
-    // Calculate min and max bounds from the volume
-    FVector BoundsMin = BoxOrigin - BoxExtent;
-    FVector BoundsMax = BoxOrigin + BoxExtent;
+}
+
+void ACPP_BoidActor::SwitchTargetPoint()
+{
     
-    FVector CurrentLocation = GetActorLocation();
-    FVector TowardCenter = BoxOrigin - CurrentLocation;
-    bool bNeedsCorrection = false;
-    
-    // Check if fish is approaching environment boundaries
-    
-    // X-axis (forward/backward)
-    if (CurrentLocation.X < BoundsMin.X + BoundaryMargin && CurrentVector.X < 0)
-    {
-        // Instead of just flipping direction, steer toward center
-        CurrentVector.X += TowardCenter.X * BoundaryAvoidanceStrength * GetWorld()->GetDeltaSeconds();
-        bNeedsCorrection = true;
-    }
-    else if (CurrentLocation.X > BoundsMax.X - BoundaryMargin && CurrentVector.X > 0)
-    {
-        CurrentVector.X += TowardCenter.X * BoundaryAvoidanceStrength * GetWorld()->GetDeltaSeconds();
-        bNeedsCorrection = true;
-    }
-    
-    // Y-axis (left/right)
-    if (CurrentLocation.Y < BoundsMin.Y + BoundaryMargin && CurrentVector.Y < 0)
-    {
-        CurrentVector.Y += TowardCenter.Y * BoundaryAvoidanceStrength * GetWorld()->GetDeltaSeconds();
-        bNeedsCorrection = true;
-    }
-    else if (CurrentLocation.Y > BoundsMax.Y - BoundaryMargin && CurrentVector.Y > 0)
-    {
-        CurrentVector.Y += TowardCenter.Y * BoundaryAvoidanceStrength * GetWorld()->GetDeltaSeconds();
-        bNeedsCorrection = true;
-    }
-    
-    // Z-axis (up/down)
-    if (CurrentLocation.Z < BoundsMin.Z + BoundaryMargin && CurrentVector.Z < 0)
-    {
-        CurrentVector.Z += TowardCenter.Z * BoundaryAvoidanceStrength * GetWorld()->GetDeltaSeconds();
-        bNeedsCorrection = true;
-    }
-    else if (CurrentLocation.Z > BoundsMax.Z - BoundaryMargin && CurrentVector.Z > 0)
-    {
-        CurrentVector.Z += TowardCenter.Z * BoundaryAvoidanceStrength * GetWorld()->GetDeltaSeconds();
-        bNeedsCorrection = true;
-    }
-    
-    // Normalize if we made changes
-    if (bNeedsCorrection)
-    {
-        CurrentVector.Normalize();
-        CurrentVector *= MovementSpeed;
-    }
 }
 
 void ACPP_BoidActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    
-    // Check for obstacles
-    //VOID METHOD IS CALLED IN TIMER FROM BEGINPLAY
-    //CheckObstacles();
-    
-    // Keep within environment bounds if set
-    //KeepInBounds();
     
     // Move and rotate the fish
     MoveAndRotate(DeltaTime);

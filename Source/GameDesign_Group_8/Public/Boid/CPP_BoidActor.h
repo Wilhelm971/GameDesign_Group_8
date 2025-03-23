@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/TargetPoint.h"
 #include "CPP_BoidActor.generated.h"
 
 class ACPP_BoidGridManager;
@@ -27,18 +28,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boid|Environment")
-	AActor* BoundaryVolume;
-    
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boid|Environment", meta = (ClampMin = "1.0", ClampMax = "10.0"))
-	float BoundaryAvoidanceStrength = 3.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boid|Environment")
-	float BoundaryMargin = 100.0f;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fish")
 	UStaticMeshComponent* FishMesh;
-    
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fish")
+    TArray<ATargetPoint*> TargetPoints;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fish")
+	bool bCanFollowTargetPoints = false;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	FVector CurrentVector;
     
@@ -47,12 +45,6 @@ public:
     
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float AvoidanceFactor = 5.0f;
-    
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
-	FVector EnvironmentMin;
-    
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
-	FVector EnvironmentMax;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
 	float VisionConeMultiplier = 0.5f;
@@ -60,14 +52,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
 	bool bCanFollowPlayer = false;
 
+	//For triggering CheckObstacles
 	FTimerHandle TimerHandle;
 
 	//Timers for movement handeling
 	float TimeSinceObstacleAvoidance;
 	float TimeSinceDirectionChange;
 	float DirectionChangeTime;
-	
 	float FollowPlayerTimer;
+	
 	float PlayerDistance;
 	float MovementSpeedFactor;
 
@@ -76,15 +69,12 @@ public:
 	
     FVector RandomDir;
 	FVector CurrentAvoidanceDirection;
-
-	//Target for the boid to follow
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	FVector FollowTarget;
     
 	// Functions
 	void CheckObstacles();
 	void MoveAndRotate(float DeltaTime);
-	void KeepInBounds();
+	void FollowTargetPoint();
+	void SwitchTargetPoint();
     
 	// Debug visualization
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
