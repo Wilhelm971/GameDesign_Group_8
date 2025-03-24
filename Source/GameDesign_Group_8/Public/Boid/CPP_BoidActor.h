@@ -85,6 +85,7 @@ public:
 
 	float DeviationChangeTimer;
 	FVector CurrentDeviation;
+	FVector MovementDirection;
 	
 	//For triggering CheckObstacles
 	FTimerHandle TimerHandle;

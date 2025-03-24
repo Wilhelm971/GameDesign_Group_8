@@ -34,6 +34,7 @@ ACPP_BoidActor::ACPP_BoidActor()
     SpeedVariation = 0.2f;
     DeviationChangeTimer = 0.0f;
     CurrentDeviation = FVector::ZeroVector;
+    MovementDirection = FVector::ZeroVector;
 }
 
 void ACPP_BoidActor::BeginPlay()
@@ -214,14 +215,11 @@ void ACPP_BoidActor::CheckObstacles()
 
 void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
 {
-    // Store current direction before applying forces
-    FVector MovementDirection = CurrentVector.GetSafeNormal();
-    
     // Apply obstacle avoidance as a steering force
     if (!CurrentAvoidanceDirection.IsNearlyZero())
     {
         // Add avoidance force
-        MovementDirection = (MovementDirection + CurrentAvoidanceDirection * AvoidanceFactor * DeltaTime).GetSafeNormal();
+        MovementDirection = (MovementDirection + CurrentAvoidanceDirection * AvoidanceFactor).GetSafeNormal();
         
         // Debug visualization of resulting direction
         if (bShowDebugRays)
@@ -257,134 +255,48 @@ void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
 
 void ACPP_BoidActor::FollowSpline(float DeltaTime)
 {
-    // Check if we have a valid spline
     if (!SplineToFollow)
     {
-        // No spline, revert to wandering
         CurrentBehaviorMode = EFishBehaviorMode::Wander;
         return;
     }
     
-    // Get spline length
-    float SplineLength = SplineToFollow->GetSplineLength();
-    
-    // Apply speed variation for more natural movement
-    float CurrentSpeed = MovementSpeed * (1.0f + FMath::RandRange(-SpeedVariation, SpeedVariation));
-    
-    // Calculate new distance along spline
-    CurrentSplineDistance += SplineDirection * CurrentSpeed * DeltaTime;
-    
-    // Handle reaching the end of the spline
-    if (CurrentSplineDistance >= SplineLength)
-    {
-        if (bLoopAlongSpline)
-        {
-            // Loop back to start
-            CurrentSplineDistance = FMath::Fmod(CurrentSplineDistance, SplineLength);
-        }
-        else
-        {
-            // Reverse direction
-            CurrentSplineDistance = SplineLength;
-            SplineDirection = -1;
-        }
-    }
-    else if (CurrentSplineDistance <= 0.0f && !bLoopAlongSpline)
-    {
-        // Reached the start while going backward, reverse direction
-        CurrentSplineDistance = 0.0f;
-        SplineDirection = 1;
-    }
-    
-    // Get position and tangent from spline
-    FVector SplinePosition = SplineToFollow->GetLocationAtDistanceAlongSpline(CurrentSplineDistance, ESplineCoordinateSpace::World);
-    FVector SplineTangent = SplineToFollow->GetTangentAtDistanceAlongSpline(CurrentSplineDistance, ESplineCoordinateSpace::World).GetSafeNormal();
-    
-    // Update deviation for natural movement
-    DeviationChangeTimer -= DeltaTime;
-    if (DeviationChangeTimer <= 0.0f)
-    {
-        // Create a new random deviation perpendicular to the spline direction
-        FVector Up = FVector(0, 0, 1);
-        FVector Right = FVector::CrossProduct(SplineTangent, Up).GetSafeNormal();
-        FVector DeviationDirection = Right * FMath::RandRange(-1.0f, 1.0f) + Up * FMath::RandRange(-1.0f, 1.0f);
-        DeviationDirection.Normalize();
-        
-        // Apply deviation scale
-        CurrentDeviation = DeviationDirection * FMath::RandRange(0.0f, PathDeviation);
-        
-        // Reset timer
-        DeviationChangeTimer = FMath::RandRange(1.0f, 3.0f);
-    }
-    
-    // Apply deviation to target position
-    FVector TargetPosition = SplinePosition + CurrentDeviation;
-    
-    
-    // Apply obstacle avoidance as a steering force
-    if (!CurrentAvoidanceDirection.IsNearlyZero())
-    {
-        // Add avoidance force
-        TargetPosition = (TargetPosition + CurrentAvoidanceDirection * AvoidanceFactor * DeltaTime).GetSafeNormal();
-        
-        // Debug visualization of resulting direction
-        if (bShowDebugRays)
-        {
-            DrawDebugDirectionalArrow(
-                GetWorld(),
-                GetActorLocation(),
-                GetActorLocation() + TargetPosition * 100.0f,
-                20.0f,
-                FColor::Blue,
-                false,
-                0.0f,
-                0,
-                3.0f
-            );
-        }
-    }
-    // Calculate direction to target
     FVector CurrentLocation = GetActorLocation();
-    FVector DirectionToTarget = (TargetPosition - CurrentLocation).GetSafeNormal();
     
-    // Calculate new rotation (blend between spline tangent and direction to target)
-    FRotator TargetRotation = FMath::Lerp(DirectionToTarget.Rotation(), SplineTangent.Rotation(), 0.5f);
-    FRotator CurrentRotation = GetActorRotation();
+    // Find the closest point on the spline to the fish's current location
+    float ClosestInputKey = SplineToFollow->FindInputKeyClosestToWorldLocation(CurrentLocation);
     
-    // Use VInterpTo for smooth rotation towards target
-    FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, 5.0f);
+    FVector ClosestSplinePoint = SplineToFollow->GetLocationAtSplineInputKey(ClosestInputKey, ESplineCoordinateSpace::World);
     
-    // Update rotation
-    SetActorRotation(NewRotation);
-    // Apply movement
-    FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetPosition, DeltaTime, 2.0f);
+    FVector SplineTangent = SplineToFollow->GetTangentAtSplineInputKey(ClosestInputKey, ESplineCoordinateSpace::World).GetSafeNormal();
     
-    // Set new location
-    SetActorLocation(NewLocation);
+    FVector SplineNormal = FVector::CrossProduct(SplineTangent, FVector::UpVector).GetSafeNormal();
+    FVector Deviation = SplineNormal * FMath::RandRange(-PathDeviation, PathDeviation);
     
-  
-    // Debug visualization
-    #if WITH_EDITOR
-    if (GetWorld()->IsPlayInEditor())
+    // Calculate movement direction based on spline tangent
+    MovementDirection = SplineTangent;
+    
+    // Optional: Debug visualization
+#if WITH_EDITOR
+    if (GetWorld()->IsPlayInEditor() && bShowDebugRays)
     {
-        // Draw the spline path
-        for (float Dist = 0; Dist < SplineLength; Dist += SplineLength / 50.0f)
-        {
-            DrawDebugPoint(GetWorld(), SplineToFollow->GetLocationAtDistanceAlongSpline(Dist, ESplineCoordinateSpace::World), 5.0f, FColor::Blue, false, -1, 0);
-        }
+        // Draw line from fish to closest spline point
+        DrawDebugLine(GetWorld(), CurrentLocation, ClosestSplinePoint, FColor::White, false, -1.0f, 0, 2.0f);
         
-        // Draw current target point
-        DrawDebugSphere(GetWorld(), TargetPosition, 15.0f, 8, FColor::Red, false, -1, 0, 1.0f);
+        // Draw spline tangent
+        DrawDebugLine(GetWorld(), ClosestSplinePoint, ClosestSplinePoint + SplineTangent * 100.0f, FColor::Red, false, -1.0f, 0, 2.0f);
         
-        // Draw line from current position to target
-        DrawDebugLine(GetWorld(), CurrentLocation, TargetPosition, FColor::Green, false, -1, 0, 2.0f);
+        // Draw spline normal
+        DrawDebugLine(GetWorld(), ClosestSplinePoint, ClosestSplinePoint + SplineNormal * 100.0f, FColor::Green, false, -1.0f, 0, 2.0f);
     }
-    #endif
+#endif
+    
 }
+
 
 void ACPP_BoidActor::Wander(float DeltaTime)
 {
-    FVector MovementDirection = CurrentVector.GetSafeNormal();
+    MovementDirection = CurrentVector.GetSafeNormal();
 
     //Change direction if enough time has passed, with a slight randomization to waiting time
     if (((FMath::FRand() * 10.0f) + 15 < TimeSinceDirectionChange || bIsChangingDirection)) 
@@ -436,7 +348,7 @@ void ACPP_BoidActor::Wander(float DeltaTime)
 void ACPP_BoidActor::FollowPlayer(float DeltaTime)
 {
     // Store current direction before applying forces
-    FVector MovementDirection = CurrentVector.GetSafeNormal();
+    MovementDirection = CurrentVector.GetSafeNormal();
 
     // Follow player if true
     if (bCanFollowPlayer)
@@ -499,27 +411,30 @@ void ACPP_BoidActor::Tick(float DeltaTime)
     switch (CurrentBehaviorMode)
     {
         case EFishBehaviorMode::Wander:
+            
             //Handles random movement and makes the fish stay mostly level with the horizon line
             Wander(DeltaTime);
             
-            // Move and rotate the fish, also applies obstacle avoidance
-            MoveAndRotate(DeltaTime);
             break;
                 
         case EFishBehaviorMode::FollowPlayer:
+            
             //Follows player until timer runs out
             FollowPlayer( DeltaTime);
 
-            // Move and rotate the fish, also applies obstacle avoidance
-            MoveAndRotate(DeltaTime);
             break;
                 
         case EFishBehaviorMode::FollowSpline:
 
             //This function handles movement on its own
             FollowSpline(DeltaTime);
+        
             break;
     }
+    
+    // Move and rotate the fish, also applies obstacle avoidance
+    MoveAndRotate(DeltaTime);
+
     
 }
 
