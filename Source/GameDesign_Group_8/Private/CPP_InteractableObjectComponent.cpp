@@ -32,7 +32,6 @@ void UCPP_InteractableObjectComponent::BeginPlay()
 
 }
 
-
 // Called every frame
 void UCPP_InteractableObjectComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                                      FActorComponentTickFunction* ThisTickFunction)
@@ -141,4 +140,3 @@ void UCPP_InteractableObjectComponent::EndOverlap(UPrimitiveComponent* Overlappe
 		}
 	}
 }
-

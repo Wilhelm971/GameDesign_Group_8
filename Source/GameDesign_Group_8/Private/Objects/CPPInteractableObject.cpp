@@ -24,8 +24,7 @@ ACPPInteractableObject::ACPPInteractableObject()
 	CollisionSphere->SetGenerateOverlapEvents(true);
 	CollisionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CollisionSphere->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
-
-
+	
 	InteractableObjectComponent = CreateDefaultSubobject<UCPP_InteractableObjectComponent>(TEXT("InteractComponent"));
 }
 
