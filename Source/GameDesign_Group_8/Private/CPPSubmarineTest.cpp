@@ -104,8 +104,6 @@ void ACPPSubmarineTest::Elevate(const FInputActionValue& InputValue)
 	
 }
 
-
-
 void ACPPSubmarineTest::InteractWithObject() 
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Emerald, "Pressed E");
@@ -119,8 +117,6 @@ void ACPPSubmarineTest::InteractWithObject()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CharacterInteractionComponent is not valid! Check initialization."));
 	}
-
-	
 
 }
 
@@ -139,7 +135,7 @@ void ACPPSubmarineTest::Move(const FInputActionValue& InputValue)
 		//AddMovementInput(ForwardRotation, InputVector.Y);
 		if (InputVector.Y < 0)
 		{
-			MovementComponent->AddInputVector(ForwardRotation*0.4*InputVector.Y);
+			MovementComponent->AddInputVector(ForwardRotation*InputVector.Y);
 
 		}
 		else
@@ -195,9 +191,6 @@ void ACPPSubmarineTest::Rotate(const FInputActionValue& InputValue)
 		RotationVelocity.Yaw += Value * RotationAcceleration; 
 	}
 }
-	
-
-
 
 void ACPPSubmarineTest::Look(const FInputActionValue& InputValue)
 {
@@ -246,7 +239,6 @@ void ACPPSubmarineTest::RotateToCamera(float DeltaTime)
 	}
 	
 }
-
 
 // Called to bind functionality to input
 void ACPPSubmarineTest::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
