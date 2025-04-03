@@ -126,10 +126,18 @@ protected:
 protected:
 	void Elevate(const FInputActionValue& InputValue);
 	void InteractWithObject();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Movement")
 	void Move(const FInputActionValue& InputValue);
+	
+	UFUNCTION(BlueprintNativeEvent, Category = "Movement")
 	void Rotate(const FInputActionValue& InputValue);
+	
 	void AdjustPitch();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Movement")
 	void Look(const FInputActionValue& InputValue);
+	
 	void FreeLook();
 	void UnFreeLook();
 

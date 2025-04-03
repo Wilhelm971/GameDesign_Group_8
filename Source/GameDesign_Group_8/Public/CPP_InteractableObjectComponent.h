@@ -28,13 +28,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
-
-
-	//In the Actor Owning this component you can set which element you want to trigger Overlap event with this.
-	//Set in Begin play
+	
 	void SetCollisionShape(UPrimitiveComponent* NewCollisionShape);
 	
 	UFUNCTION(BlueprintCallable, Category="Interaction")

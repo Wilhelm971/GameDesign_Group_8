@@ -24,6 +24,7 @@ public:
 	float HighlightTimerInterval = 0.1f;
 	
 	UCPP_CharacterInteractionComponent();
+	
 
 protected:
 	// Called when the game starts
@@ -33,14 +34,18 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void OnBeginOverlap(AActor* CausingActor);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void OnEndOverlap(AActor* CausingActor);
 
 	void ToggleHighlightActor();
 
 	void FindNearestInteractableActor();
 
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void OnInteract();
 	
 	UPROPERTY()

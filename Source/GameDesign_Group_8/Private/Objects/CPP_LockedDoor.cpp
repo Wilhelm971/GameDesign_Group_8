@@ -36,8 +36,8 @@ void ACPP_LockedDoor::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("No PuzzleManager linked to this door"));
 	}
 	StartingLocation = GetActorLocation();
-	endingLocation = StartingLocation;
-	endingLocation.Z += 100.0f;
+	EndingLocation = StartingLocation;
+	EndingLocation.Z += MoveHeight;
 
 
 }
@@ -48,9 +48,9 @@ void ACPP_LockedDoor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (bCanOpen)
 	{
-		FVector NewPosition = FMath::VInterpTo(GetActorLocation(),endingLocation, DeltaTime, OpeningSpeed);
+		FVector NewPosition = FMath::VInterpTo(GetActorLocation(),EndingLocation, DeltaTime, OpeningSpeed);
 		SetActorLocation(NewPosition);
-		if (NewPosition == endingLocation)
+		if (NewPosition == EndingLocation)
 		{
 			bCanOpen = false;
 			PrimaryActorTick.bCanEverTick = false;

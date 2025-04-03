@@ -23,7 +23,6 @@ void UCPP_CharacterInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
 	
 }
 
@@ -116,9 +115,7 @@ void UCPP_CharacterInteractionComponent::FindNearestInteractableActor()
 	//Loops throuhg array and finds the index of the closest object
 	for (int i = 0; i < OverlappingActors.Num(); i++)
 	{
-		float ComparedDistanceValue = FVector::Dist(
-													OverlappingActors[i]->GetActorLocation(),	//ObjectLocation
-		                                            GetOwner()->GetActorLocation());			//OwningActorLocation
+		float ComparedDistanceValue = FVector::Dist(OverlappingActors[i]->GetActorLocation(),GetOwner()->GetActorLocation());			
 		if (i == 0)
 		{
 			ClosestObjectDistance = ComparedDistanceValue;

@@ -28,6 +28,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Puzzle")
 	TArray<int32> PuzzlePiecesCurrent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
+	bool bDoesCareAboutOrder = false;
 
 	virtual void CheckPuzzleState() override;
 

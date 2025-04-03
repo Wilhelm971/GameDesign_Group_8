@@ -26,7 +26,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
 	UMaterialInterface* ActiveMaterial;
 
-	UPROPERTY(editAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
 	UMaterialInterface* InactiveMaterial;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")

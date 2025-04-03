@@ -15,12 +15,15 @@ class GAMEDESIGN_GROUP_8_API ACPP_LockedDoor : public AActor
 	GENERATED_BODY()
 
 	FVector StartingLocation;
-	FVector endingLocation;
+	FVector EndingLocation;
 
 	bool bCanOpen = false;
 
 	UPROPERTY(EditAnywhere, Category = "Opening Parameters")
 	float OpeningSpeed = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Opening Parameters")
+	float MoveHeight = 100.0f;
 	
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "True"))
 	USceneComponent* SceneRoot;

@@ -14,8 +14,6 @@
 // Sets default values for this component's properties
 UCPP_InteractableObjectComponent::UCPP_InteractableObjectComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
 	CollisionShape = nullptr;
@@ -23,22 +21,10 @@ UCPP_InteractableObjectComponent::UCPP_InteractableObjectComponent()
 
 }
 
-
 // Called when the game starts
 void UCPP_InteractableObjectComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-
-}
-
-// Called every frame
-void UCPP_InteractableObjectComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                                     FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UCPP_InteractableObjectComponent::SetCollisionShape(UPrimitiveComponent* NewCollisionShape)
@@ -114,12 +100,16 @@ void UCPP_InteractableObjectComponent::BeginOverlap(UPrimitiveComponent* Overlap
 	if (OtherActor && OtherActor != this->GetOwner())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Overlapping actor is in"));
-		if(IInteract_Interface* Interact_Interface = Cast<IInteract_Interface>(OtherActor))
+		if (OtherActor && OtherActor->GetClass()->ImplementsInterface(UInteract_Interface::StaticClass()))
 		{
-			Interact_Interface->Execute_BeginOverlap(OtherActor, GetOwner());
+			IInteract_Interface::Execute_BeginOverlap(OtherActor, GetOwner());
 			UE_LOG(LogTemp, Warning, TEXT("Interface found, calling Begin Overlap: "));
-
 		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("OtherActor does not implement Interact_Interface"));
+		}
+
 	}
 	
 }
@@ -132,11 +122,15 @@ void UCPP_InteractableObjectComponent::EndOverlap(UPrimitiveComponent* Overlappe
 	if (OtherActor && OtherActor != this->GetOwner())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Overlapping actor left"));
-
-		if(IInteract_Interface* Interact_Interface = Cast<IInteract_Interface>(OtherActor))
+		if (OtherActor && OtherActor->GetClass()->ImplementsInterface(UInteract_Interface::StaticClass()))
 		{
-			Interact_Interface->Execute_EndOverlap(OtherActor, GetOwner());
-			UE_LOG(LogTemp, Warning, TEXT("Interface found, calling End Overlap: "));
+			IInteract_Interface::Execute_EndOverlap(OtherActor, GetOwner());
+			UE_LOG(LogTemp, Warning, TEXT("Interface found, calling Begin Overlap: "));
 		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("OtherActor does not implement Interact_Interface"));
+		}
+
 	}
 }

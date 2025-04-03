@@ -50,17 +50,31 @@ void ACPP_SequencePuzzleManager::CheckPuzzleState()
 	
 	bool bIsComplete = true;
 
-	// Compare each value in order
-	for (int32 i = 0; i < PuzzlePiecesSolution.Num(); i++)
+	if (bDoesCareAboutOrder)
 	{
-		if (PuzzlePiecesCurrent[i] != PuzzlePiecesSolution[i])
+		// Compare each value in order
+		for (int i = 0; i < PuzzlePiecesSolution.Num(); i++)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Mismatch found at index %d! Resetting puzzle."), i);
-			bIsComplete = false;
-			break;
+			if (PuzzlePiecesCurrent[i] != PuzzlePiecesSolution[i])
+			{
+				bIsComplete = false;
+				break;
+			}
 		}
 	}
-
+	else
+	{
+		// Compare each value in any order
+		for (int i = 0; i < PuzzlePiecesSolution.Num(); i++)
+		{
+			if (!PuzzlePiecesCurrent.Contains(PuzzlePiecesSolution[i]))
+			{
+				bIsComplete = false;
+				break;
+			}
+		}
+	}
+	
 	// If solved, notify listeners
 	if (bIsComplete)
 	{

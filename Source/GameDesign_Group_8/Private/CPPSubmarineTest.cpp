@@ -25,13 +25,13 @@ ACPPSubmarineTest::ACPPSubmarineTest()
 	Capsule->SetBoxExtent(FVector(75.0f, 60.0f, 70.0f));
 
 	Capsule->SetCollisionProfileName(TEXT("Pawn"));
-	RootComponent = Capsule;
-
 
 	SubmarineMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SubmarineMesh"));
 	SubmarineMesh->SetupAttachment(RootComponent);
-	SubmarineMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
+	SubmarineMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
+	RootComponent = SubmarineMesh;
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->bUsePawnControlRotation = true;
@@ -124,7 +124,7 @@ void ACPPSubmarineTest::InteractWithObject()
 
 }
 
-void ACPPSubmarineTest::Move(const FInputActionValue& InputValue) 
+void ACPPSubmarineTest::Move_Implementation(const FInputActionValue& InputValue) 
 {
 	FVector2D InputVector = InputValue.Get<FVector2D>();
 
@@ -185,7 +185,7 @@ void ACPPSubmarineTest::AdjustPitch()
 	
 }
 
-void ACPPSubmarineTest::Rotate(const FInputActionValue& InputValue)
+void ACPPSubmarineTest::Rotate_Implementation(const FInputActionValue& InputValue)
 {
 	float Value = InputValue.Get<float>();
 
@@ -199,7 +199,7 @@ void ACPPSubmarineTest::Rotate(const FInputActionValue& InputValue)
 
 
 
-void ACPPSubmarineTest::Look(const FInputActionValue& InputValue)
+void ACPPSubmarineTest::Look_Implementation(const FInputActionValue& InputValue)
 {
 	FVector2D InputVector = InputValue.Get<FVector2D>();
 
