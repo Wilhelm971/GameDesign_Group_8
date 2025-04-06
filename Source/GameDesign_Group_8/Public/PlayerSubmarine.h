@@ -25,7 +25,7 @@ public:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* Box;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* SubmarineMesh;
 
 	
@@ -90,9 +90,9 @@ protected:
 
 	void Pause();
 
+	float TorqueForce;
 
 	float MoveForce;
-	float TorqueForce;
 	float ElevateForce;
 
 	void StraightenBoatLevel();
