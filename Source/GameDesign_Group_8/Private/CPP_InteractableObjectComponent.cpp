@@ -4,10 +4,10 @@
 #include "CPP_InteractableObjectComponent.h"
 
 #include "Interact_Interface.h"
-#include "InterchangeResult.h"
-#include "ToolWidgetsSlateTypes.h"
+//#include "InterchangeResult.h"
+//#include "ToolWidgetsSlateTypes.h"
 #include "GameFramework/Actor.h"
-#include "Components/SphereComponent.h"
+//#include "Components/SphereComponent.h"
 
 
 
