@@ -8,6 +8,10 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "UI/InGameHUD.h"
+#include "UI/GameHUDWidget.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Physics/ImmediatePhysics/ImmediatePhysicsShared/ImmediatePhysicsCore.h"
 
@@ -43,6 +47,10 @@ APlayerSubmarine::APlayerSubmarine()
 	TorqueForce = 200000.0f;
 	ElevateForce = 15000.0f;
 
+	MaxOxygen = 100.0f;
+	CurrentOxygen = 60.0f;
+	OxygenDrainRate = 1.0f;
+
 }
 
 // Called when the game starts or when spawned
@@ -57,8 +65,33 @@ void APlayerSubmarine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//StraightenBoatLevel();
 
+/*
+	if (!UGameplayStatics::IsGamePaused(GetWorld()))
+	{
+		CurrentOxygen -= OxygenDrainRate * DeltaTime;
+		CurrentOxygen = FMath::Clamp(CurrentOxygen, 0.0f, MaxOxygen);
+
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	
+		if (HUDWidgetClass)
+		{
+			PauseMenu = CreateWidget<UPauseScreenWidget>(PlayerController, PauseMenuClass);
+			if (HUDWidget)
+			{
+				//HUDWidget->UpdateOxygen(CurrentOxygen, MaxOxygen);
+			}
+			
+		}
+
+		if (CurrentOxygen <= 0.0f)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 7.0f, FColor::Red, "Oxygen Drained !");
+		}
+	}
+
+	//StraightenBoatLevel();
+*/
 }
 
 // Called to bind functionality to input
@@ -83,7 +116,7 @@ void APlayerSubmarine::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::Look);
 		
-		Input->BindAction(PauseAction, ETriggerEvent::Started, this, &APlayerSubmarine::Pause);
+		Input->BindAction(PauseAction, ETriggerEvent::Started, this, &APlayerSubmarine::TogglePauseMenu);
 		Input->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::InteractWithObject);
 	}
 
@@ -158,9 +191,81 @@ void APlayerSubmarine::Look_Implementation(const FInputActionValue& InputValue)
 	}
 }
 
-void APlayerSubmarine::Pause()
+void APlayerSubmarine::TogglePauseMenu()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Pause")));
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (!PlayerController) return;
+	
+
+	if (bIsPaused)
+	{
+		if (PauseMenu)
+			{
+				PauseMenu->RemoveFromParent();
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fuck")));
+			}
+		
+		
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+		PlayerController->bShowMouseCursor = false;
+		PlayerController->SetInputMode(FInputModeGameOnly());
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Balls")));
+
+
+		if (HUDWidget)
+		{
+			HUDWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+	
+		bIsPaused = false;
+	}
+
+	else
+	{
+		if (PauseMenuClass)
+		{
+			PauseMenu = CreateWidget<UPauseScreenWidget>(PlayerController, PauseMenuClass);
+			if (PauseMenu)
+			{
+			
+		
+				PauseMenu->AddToViewport();
+
+				
+				UGameplayStatics::SetGamePaused(GetWorld(), true);
+				PlayerController->bShowMouseCursor = true;
+				
+				
+				FInputModeUIOnly InputMode;
+				InputMode.SetWidgetToFocus(PauseMenu->TakeWidget());
+				InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+				PlayerController->SetInputMode(InputMode);
+
+
+				if ( HUDWidgetClass)
+				{
+					HUDWidget = CreateWidget<UShellWidget>(GetWorld(), HUDWidgetClass);
+					if (HUDWidget)
+					{
+						HUDWidget-> SetVisibility(ESlateVisibility::Hidden);
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Ballsssss")));
+					}
+				}
+	
+				
+				bIsPaused = true;
+				
+			}
+		}
+	}
+	
+}
+
+void APlayerSubmarine::RefillOxygen(float Amount)
+{
+	//CurrentOxygen = FMath::Clamp(CurrentOxygen + Amount, 0.0f, MaxOxygen);
 }
 
 void APlayerSubmarine::StraightenBoatLevel()

@@ -7,6 +7,8 @@
 
 #include "Components/WidgetComponent.h"
 #include "ShellWidget.h"
+#include "GameHUDWidget.h"
+#include "PauseScreenWidget.h"
 
 #include "InGameHUD.generated.h"
 
@@ -29,11 +31,20 @@ class GAMEDESIGN_GROUP_8_API AInGameHUD : public AHUD
 
 	UFUNCTION()
 	void UpdateShellCount(int32 Value);
+	
+
+	/*UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> ShellWidgetClass;
+*/
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> HUDWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UUserWidget> ShellWidgetClass;
+	TSubclassOf<UUserWidget> PauseScreenWidgetClass;
 	
 	private:
 	UShellWidget* ShellWidget;
-	
+
+	UGameHUDWidget* HUDWidget;
+
 };

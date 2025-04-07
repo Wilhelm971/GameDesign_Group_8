@@ -88,7 +88,7 @@ protected:
 
 	void InteractWithObject();
 
-	void Pause();
+
 
 	float TorqueForce;
 
@@ -96,5 +96,47 @@ protected:
 	float ElevateForce;
 
 	void StraightenBoatLevel();
+
+
+	// UI
+
+	protected:
+	
+	void TogglePauseMenu();
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UPauseScreenWidget> PauseMenuClass;
+
+	//UPROPERTY(EditDefaultsOnly, Category = "UI")
+	//TSubclassOf<class UShellWidget> ShellWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UGameHUDWidget> HUDWidgetClass;
+
+	
+	UPROPERTY()
+	UUserWidget* PauseMenu;
+
+	//UPROPERTY()
+	//UUserWidget* ShellWidget;
+
+	UPROPERTY()
+	UUserWidget* HUDWidget;
+
+	bool bIsPaused;
+
+
+	// Oxygen
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Oxygen")
+	float MaxOxygen;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Oxygen")
+	float CurrentOxygen;
+
+	UPROPERTY(EditAnywhere, Category = "Oxygen")
+	float OxygenDrainRate;
+
+public:
+	void RefillOxygen(float Amount);
 	
 };

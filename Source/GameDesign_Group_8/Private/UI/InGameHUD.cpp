@@ -13,12 +13,12 @@ void AInGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if ( ShellWidgetClass)
+	if (HUDWidgetClass)
 	{
-		ShellWidget = CreateWidget<UShellWidget>(GetWorld(), ShellWidgetClass);
-		if (ShellWidget)
+		HUDWidget = CreateWidget<UGameHUDWidget>(GetWorld(), HUDWidgetClass);
+		if (HUDWidget)
 		{
-			ShellWidget-> AddToViewport();
+			HUDWidget-> AddToViewport();
 		}
 	}
 	
@@ -42,3 +42,5 @@ void AInGameHUD::UpdateShellCount(int32 Value)
 		ShellWidget->UpdateShellCount(Value);
 	}
 }
+
+

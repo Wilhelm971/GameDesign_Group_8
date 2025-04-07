@@ -25,6 +25,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Datasmith/DatasmithCore/Public/DatasmithDefinitions.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -177,7 +180,8 @@
       <workItem from="1743620087559" duration="9417000" />
       <workItem from="1743718301285" duration="1629000" />
       <workItem from="1743936610313" duration="11545000" />
-      <workItem from="1743956741600" duration="2517000" />
+      <workItem from="1743956741600" duration="17481000" />
+      <workItem from="1744028533635" duration="8714000" />
     </task>
     <servers />
   </component>
