@@ -18,11 +18,14 @@ bool UPauseScreenWidget::Initialize()
 		ResumeButton->OnClicked.AddDynamic(this, &UPauseScreenWidget::OnResumeClicked);
 	}
 
+	//Testing
+	/*
 	if (MainMenuButton)
 	{
 		MainMenuButton->OnClicked.AddDynamic(this, &UPauseScreenWidget::OnMainMenuClicked);
 	}
-
+*/
+	
 	if (QuitButton)
 	{
 		QuitButton->OnClicked.AddDynamic(this, &UPauseScreenWidget::OnQuitClicked);
@@ -60,10 +63,13 @@ void UPauseScreenWidget::OnResumeClicked()
 		//}
 }
 
+//Testing
+/*
 void UPauseScreenWidget::OnMainMenuClicked()
 {
 	UGameplayStatics::OpenLevel(this, "MainMenu");
 }
+*/
 
 void UPauseScreenWidget::OnQuitClicked()
 {

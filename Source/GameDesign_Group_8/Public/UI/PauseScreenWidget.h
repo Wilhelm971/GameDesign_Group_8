@@ -21,8 +21,9 @@ public:
 	UFUNCTION()
 	void OnResumeClicked();
 
-	UFUNCTION()
-	void OnMainMenuClicked();
+	// Testing
+	//UFUNCTION()
+	//void OnMainMenuClicked();
 
 	UFUNCTION()
 	void OnQuitClicked();
@@ -31,8 +32,12 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ResumeButton;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* MainMenuButton;
+
+	// 
+	//Commented out for testing
+	
+	//UPROPERTY(meta = (BindWidget))
+	//class UButton* MainMenuButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;
