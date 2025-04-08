@@ -26,6 +26,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/String/FormatStringSan.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Datasmith/DatasmithCore/Public/DatasmithDefinitions.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -183,6 +184,8 @@
       <workItem from="1743956741600" duration="17481000" />
       <workItem from="1744028533635" duration="8714000" />
       <workItem from="1744097347746" duration="4965000" />
+      <workItem from="1744116376427" duration="4016000" />
+      <workItem from="1744123911817" duration="6164000" />
     </task>
     <servers />
   </component>

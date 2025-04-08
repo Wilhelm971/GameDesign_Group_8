@@ -27,9 +27,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateOxygen(float Current, float Max);
-
-	UFUNCTION(BlueprintCallable)
-	void SetHUDVisibility(bool bVisible);
+	
 
 // protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -39,5 +37,6 @@ public:
 	class UProgressBar* OxygenBar;
 
 
+	
 	
 };

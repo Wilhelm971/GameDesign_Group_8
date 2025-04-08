@@ -20,6 +20,9 @@ public:
 
 	UFUNCTION()
 	void OnStartClicked();
+
+	UFUNCTION()
+	void OnSettingsClicked();
 	
 	UFUNCTION()
 	void OnQuitClicked();
@@ -27,6 +30,9 @@ public:
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* StartButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* SettingsButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;

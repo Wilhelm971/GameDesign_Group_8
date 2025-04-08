@@ -17,32 +17,45 @@ class GAMEDESIGN_GROUP_8_API UPauseScreenWidget : public UUserWidget
 
 public:
 	virtual bool Initialize() override;
-	
+
+
+
+
+	// Functions for buttons
 	UFUNCTION()
 	void OnResumeClicked();
 
-	// Testing
-	//UFUNCTION()
-	//void OnMainMenuClicked();
+	UFUNCTION()
+	void OnSettingsClicked();
+
+	UFUNCTION()
+	void OnMainMenuClicked();
 
 	UFUNCTION()
 	void OnQuitClicked();
 
+
+
+
+	// Buttons
 	protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ResumeButton;
 
-
-	// 
-	//Commented out for testing
+	UPROPERTY(meta = (BindWidget))
+	class UButton* SettingsButton;
 	
-	//UPROPERTY(meta = (BindWidget))
-	//class UButton* MainMenuButton;
+	UPROPERTY(meta = (BindWidget))
+	class UButton* MainMenuButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;
 
 
+
+
+
+	
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UGameHUDWidget> HUDWidgetClass;
 

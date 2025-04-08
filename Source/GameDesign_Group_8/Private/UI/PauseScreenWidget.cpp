@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Objects/OxygenBubble.h"
 #include "UI/GameHUDWidget.h"
+#include "UI/InGameHUD.h"
 
 
 bool UPauseScreenWidget::Initialize()
@@ -18,13 +19,16 @@ bool UPauseScreenWidget::Initialize()
 		ResumeButton->OnClicked.AddDynamic(this, &UPauseScreenWidget::OnResumeClicked);
 	}
 
-	//Testing
-	/*
+	if (SettingsButton)
+	{
+		SettingsButton->OnClicked.AddDynamic(this, &UPauseScreenWidget::OnSettingsClicked);
+	}
+
 	if (MainMenuButton)
 	{
 		MainMenuButton->OnClicked.AddDynamic(this, &UPauseScreenWidget::OnMainMenuClicked);
 	}
-*/
+
 	
 	if (QuitButton)
 	{
@@ -38,10 +42,13 @@ bool UPauseScreenWidget::Initialize()
 void UPauseScreenWidget::OnResumeClicked()
 {
 	
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 
 			if (PlayerController)
 			{
+
+				//Player->PauseGame();
+				
 				PlayerController->SetInputMode(FInputModeGameOnly());
 				PlayerController->bShowMouseCursor = false;
 				UGameplayStatics::SetGamePaused(GetWorld(), false);
@@ -50,12 +57,12 @@ void UPauseScreenWidget::OnResumeClicked()
 			RemoveFromParent();
 
 
-	/*UGameHUDWidget* GameHUDWidget = Cast<UGameHUDWidget>();
+	AInGameHUD* GameHUDWidget = Cast<AInGameHUD>(PlayerController->GetHUD());
 	if (GameHUDWidget)
 	{
-		GameHUDWidget->SetHUDVisibility(true);
+		GameHUDWidget->SetVisibility(true);
 	}
-	*/
+	
 	
 		//if (HUDWidget)
 		//{
@@ -63,13 +70,18 @@ void UPauseScreenWidget::OnResumeClicked()
 		//}
 }
 
-//Testing
-/*
+void UPauseScreenWidget::OnSettingsClicked()
+{
+	UE_LOG(LogTemp, Display, TEXT("SettingsClicked"));
+}
+
+
 void UPauseScreenWidget::OnMainMenuClicked()
 {
-	UGameplayStatics::OpenLevel(this, "MainMenu");
+	UGameplayStatics::OpenLevel(this, "LandscapeTest");
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "LandscapeTest");
 }
-*/
+
 
 void UPauseScreenWidget::OnQuitClicked()
 {

@@ -15,10 +15,13 @@ void AMainMenuGameMode::BeginPlay()
 		if (MainMenuWidget)
 		{
 			MainMenuWidget->AddToViewport();
+
+			
 			APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 			if (PlayerController)
 			{
 				PlayerController->SetShowMouseCursor(true);
+				//FocusWidget HERE
 				PlayerController->SetInputMode(FInputModeUIOnly());
 			}
 		}

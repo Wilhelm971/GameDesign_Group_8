@@ -6,9 +6,7 @@
 #include "GameFramework/HUD.h"
 
 #include "Components/WidgetComponent.h"
-#include "ShellWidget.h"
 #include "GameHUDWidget.h"
-#include "PauseScreenWidget.h"
 
 #include "InGameHUD.generated.h"
 
@@ -21,13 +19,9 @@ class GAMEDESIGN_GROUP_8_API AInGameHUD : public AHUD
 	GENERATED_BODY()
 
 	public:
-	AInGameHUD();
-
-	virtual void DrawHUD() override;
 	
 	virtual void BeginPlay() override;
-	
-	virtual void Tick(float DeltaTime) override;
+
 
 	UFUNCTION()
 	void UpdateShellCount(int32 Value);
@@ -39,12 +33,13 @@ class GAMEDESIGN_GROUP_8_API AInGameHUD : public AHUD
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> HUDWidgetClass;
 
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UUserWidget> PauseScreenWidgetClass;
-	
 	private:
-	UShellWidget* ShellWidget;
 
 	UGameHUDWidget* HUDWidget;
+
+public:
+	
+	UFUNCTION()
+	void SetVisibility(bool bVisibility);
 
 };

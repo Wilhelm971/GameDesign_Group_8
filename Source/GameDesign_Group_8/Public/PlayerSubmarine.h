@@ -15,7 +15,7 @@ class GAMEDESIGN_GROUP_8_API APlayerSubmarine : public APawn
 	GENERATED_BODY()
 
 public:
-	
+	// Setting up Mesh, Collision and Camera
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
@@ -28,7 +28,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* SubmarineMesh;
 
+
+
+
 	
+public:
 	// Sets default values for this pawn's properties
 	APlayerSubmarine();
 
@@ -43,8 +47,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+
+
+
+
+
+	
 // Enhanced Input System
-	protected:
+protected:
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputMappingContext* InputMappingContext;
 
@@ -68,6 +79,13 @@ public:
 
 
 
+
+
+
+
+	
+
+
 	// Movement Functions
 protected:
 
@@ -84,31 +102,38 @@ protected:
 	void Look(const FInputActionValue& InputValue);
 
 	
+	void StraightenBoatLevel();
 	
 
+
+	// Movement speed
+	float TorqueForce;
+	float MoveForce;
+	float ElevateForce;
+
+	// Function for interactions
 	void InteractWithObject();
 
 
 
-	float TorqueForce;
-
-	float MoveForce;
-	float ElevateForce;
-
-	void StraightenBoatLevel();
 
 
+
+
+
+	
+
+	
 	// UI
 
 	protected:
-	
+	// Function for pausing the game
 	void TogglePauseMenu();
 
+
+	// Setting up slot for a Pause widget, and a HUD widget
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UPauseScreenWidget> PauseMenuClass;
-
-	//UPROPERTY(EditDefaultsOnly, Category = "UI")
-	//TSubclassOf<class UShellWidget> ShellWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UGameHUDWidget> HUDWidgetClass;
@@ -116,16 +141,19 @@ protected:
 	
 	UPROPERTY()
 	UUserWidget* PauseMenu;
-
-	//UPROPERTY()
-	//UUserWidget* ShellWidget;
-
+	
 	UPROPERTY()
 	UUserWidget* HUDWidget;
 
+
+	// A boolean to check if the game is paused
 	bool bIsPaused;
 
 
+
+
+	
+	
 	// Oxygen
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Oxygen")
 	float MaxOxygen;
@@ -138,5 +166,11 @@ protected:
 
 public:
 	void RefillOxygen(float Amount);
+
+
+protected:
+	UFUNCTION()
+	void LostGame();
+	
 	
 };

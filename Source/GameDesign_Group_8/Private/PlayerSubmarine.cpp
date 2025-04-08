@@ -5,12 +5,14 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "MeshPaintVisualize.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "UI/InGameHUD.h"
+#include "UI/PauseScreenWidget.h"
 #include "UI/GameHUDWidget.h"
 
 
@@ -20,7 +22,7 @@ APlayerSubmarine::APlayerSubmarine()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
+	// Creating the meash, camera and collision
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
 	Box -> SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
 
@@ -41,6 +43,10 @@ APlayerSubmarine::APlayerSubmarine()
 
 	bUseControllerRotationYaw = false;
 
+
+
+	// Defining MovementSpeed & Oxygen
+
 	MoveForce = 30000.0f;
 	TorqueForce = 200000.0f;
 	ElevateForce = 15000.0f;
@@ -48,6 +54,10 @@ APlayerSubmarine::APlayerSubmarine()
 	MaxOxygen = 100.0f;
 	CurrentOxygen = 60.0f;
 	OxygenDrainRate = 4.0f;
+
+
+	
+	bIsPaused = false;
 
 }
 
@@ -82,6 +92,7 @@ void APlayerSubmarine::Tick(float DeltaTime)
 				if (UGameHUDWidget* GameHUD = Cast<UGameHUDWidget>(HUDWidget))
 				{
 					GameHUD->UpdateOxygen(CurrentOxygen, MaxOxygen);
+					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Check");
 				}
 			}
 			
@@ -90,6 +101,7 @@ void APlayerSubmarine::Tick(float DeltaTime)
 		if (CurrentOxygen <= 0.0f)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 7.0f, FColor::Red, "Oxygen Drained !");
+			LostGame();
 		}
 	}
 
@@ -110,17 +122,28 @@ void APlayerSubmarine::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			Subsystem->AddMappingContext(InputMappingContext, 0);
 		}
 
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to find an Input Mapping Context!"))
+		}
+
 	}
 	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::Move);
 		Input->BindAction(RotateAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::Rotate);
 		Input->BindAction(ElevateAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::Elevate);
-
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::Look);
 		
-		Input->BindAction(PauseAction, ETriggerEvent::Started, this, &APlayerSubmarine::TogglePauseMenu);
 		Input->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerSubmarine::InteractWithObject);
+		Input->BindAction(PauseAction, ETriggerEvent::Started, this, &APlayerSubmarine::TogglePauseMenu);
+
+	}
+
+	else
+	{
+		
+			UE_LOG(LogTemp, Error, TEXT("Failed to find an Enhanced Input Component!"));
 	}
 
 }
@@ -200,12 +223,22 @@ void APlayerSubmarine::TogglePauseMenu()
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (!PlayerController) return;
 	
+	bIsPaused = UGameplayStatics::IsGamePaused(GetWorld());
 
+
+	AInGameHUD* HUD = Cast<AInGameHUD>(PlayerController->GetHUD());
+	if (HUD)
+	{
+		HUD->SetVisibility(bIsPaused);
+	}
+	
 	if (bIsPaused)
 	{
 		if (PauseMenu)
 			{
 				PauseMenu->RemoveFromParent();
+				//PauseMenu = nullptr;
+			
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fuck")));
 			}
 		
@@ -216,28 +249,21 @@ void APlayerSubmarine::TogglePauseMenu()
 
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Balls")));
 
-
-		if (HUDWidget)
-		{
-			HUDWidget->SetVisibility(ESlateVisibility::Visible);
-		}
-	
-		bIsPaused = false;
+		
 	}
 
 	else
 	{
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+		
 		if (PauseMenuClass)
 		{
-			PauseMenu = CreateWidget<UPauseScreenWidget>(PlayerController, PauseMenuClass);
+			PauseMenu = CreateWidget<UUserWidget>(GetWorld(), PauseMenuClass);
 			if (PauseMenu)
 			{
-			
-		
 				PauseMenu->AddToViewport();
 
 				
-				UGameplayStatics::SetGamePaused(GetWorld(), true);
 				PlayerController->bShowMouseCursor = true;
 				
 				
@@ -246,19 +272,6 @@ void APlayerSubmarine::TogglePauseMenu()
 				InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 				PlayerController->SetInputMode(InputMode);
 
-
-				if ( HUDWidgetClass)
-				{
-					HUDWidget = CreateWidget<UShellWidget>(GetWorld(), HUDWidgetClass);
-					if (HUDWidget)
-					{
-						HUDWidget-> SetVisibility(ESlateVisibility::Hidden);
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Ballsssss")));
-					}
-				}
-	
-				
-				bIsPaused = true;
 				
 			}
 		}
@@ -287,3 +300,9 @@ void APlayerSubmarine::InteractWithObject()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Interact")));
 }
+
+void APlayerSubmarine::LostGame()
+{
+	UE_LOG(LogTemp, Display, TEXT("You Lost The Game!"));
+}
+

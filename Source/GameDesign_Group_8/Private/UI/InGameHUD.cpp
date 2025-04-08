@@ -2,10 +2,9 @@
 
 
 #include "UI/InGameHUD.h"
+#include "Blueprint/UserWidget.h"
+#include "UI/GameHUDWidget.h"
 
-AInGameHUD::AInGameHUD()
-{
-}
 
 
 
@@ -24,22 +23,19 @@ void AInGameHUD::BeginPlay()
 	
 }
 
-void AInGameHUD::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-
-void AInGameHUD::DrawHUD()
-{
-	Super::DrawHUD();
-}
-
 void AInGameHUD::UpdateShellCount(int32 Value)
 {
-	if (ShellWidget)
+	if (HUDWidget)
 	{
-		ShellWidget->UpdateShellCount(Value);
+		HUDWidget->UpdateShellCount(Value);
+	}
+}
+
+void AInGameHUD::SetVisibility(bool bVisibility)
+{
+	if (HUDWidget)
+	{
+		HUDWidget -> SetVisibility(bVisibility ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 	}
 }
 

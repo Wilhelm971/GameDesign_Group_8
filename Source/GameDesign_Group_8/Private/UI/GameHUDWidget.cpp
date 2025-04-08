@@ -12,6 +12,7 @@ UGameHUDWidget::UGameHUDWidget(const FObjectInitializer& ObjectInitializer) : Su
 void UGameHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	
 }
 
 void UGameHUDWidget::UpdateShellCount(int32 Value)
@@ -24,15 +25,12 @@ void UGameHUDWidget::UpdateShellCount(int32 Value)
 
 void UGameHUDWidget::UpdateOxygen(float Current, float Max)
 {
-	if (OxygenBar)
+	UProgressBar* OxygenProgressBar = Cast<UProgressBar>(OxygenBar);
+	if (OxygenProgressBar)
 	{
 		float Percent = FMath::Clamp(Current / Max, 0.f, 1.f);
-		OxygenBar->SetPercent(Percent);
+		OxygenProgressBar->SetPercent(Percent);
 		//UE_LOG(LogTemp, Warning, TEXT("OxygenBar updated: %f"), Current / Max);
 	}
 }
 
-void UGameHUDWidget::SetHUDVisibility(bool bVisible)
-{
-	SetVisibility(bVisible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
-}
