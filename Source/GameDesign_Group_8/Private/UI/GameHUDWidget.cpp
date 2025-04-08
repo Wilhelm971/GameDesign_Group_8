@@ -26,7 +26,9 @@ void UGameHUDWidget::UpdateOxygen(float Current, float Max)
 {
 	if (OxygenBar)
 	{
-		OxygenBar->SetPercent(Current/Max);
+		float Percent = FMath::Clamp(Current / Max, 0.f, 1.f);
+		OxygenBar->SetPercent(Percent);
+		//UE_LOG(LogTemp, Warning, TEXT("OxygenBar updated: %f"), Current / Max);
 	}
 }
 

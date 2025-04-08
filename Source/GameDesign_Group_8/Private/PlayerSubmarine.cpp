@@ -12,8 +12,6 @@
 
 #include "UI/InGameHUD.h"
 #include "UI/GameHUDWidget.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Physics/ImmediatePhysics/ImmediatePhysicsShared/ImmediatePhysicsCore.h"
 
 
 // Sets default values
@@ -49,7 +47,7 @@ APlayerSubmarine::APlayerSubmarine()
 
 	MaxOxygen = 100.0f;
 	CurrentOxygen = 60.0f;
-	OxygenDrainRate = 1.0f;
+	OxygenDrainRate = 4.0f;
 
 }
 
@@ -66,20 +64,25 @@ void APlayerSubmarine::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-/*
+
 	if (!UGameplayStatics::IsGamePaused(GetWorld()))
 	{
 		CurrentOxygen -= OxygenDrainRate * DeltaTime;
 		CurrentOxygen = FMath::Clamp(CurrentOxygen, 0.0f, MaxOxygen);
 
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor:: Red, FString::Printf(TEXT("Oxygen: %.1f / %.1f"), CurrentOxygen, MaxOxygen));
+
 		APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	
 		if (HUDWidgetClass)
 		{
-			PauseMenu = CreateWidget<UPauseScreenWidget>(PlayerController, PauseMenuClass);
+			HUDWidget = CreateWidget<UGameHUDWidget>(PlayerController, HUDWidgetClass);
 			if (HUDWidget)
 			{
-				//HUDWidget->UpdateOxygen(CurrentOxygen, MaxOxygen);
+				if (UGameHUDWidget* GameHUD = Cast<UGameHUDWidget>(HUDWidget))
+				{
+					GameHUD->UpdateOxygen(CurrentOxygen, MaxOxygen);
+				}
 			}
 			
 		}
@@ -91,7 +94,7 @@ void APlayerSubmarine::Tick(float DeltaTime)
 	}
 
 	//StraightenBoatLevel();
-*/
+
 }
 
 // Called to bind functionality to input
@@ -265,7 +268,7 @@ void APlayerSubmarine::TogglePauseMenu()
 
 void APlayerSubmarine::RefillOxygen(float Amount)
 {
-	//CurrentOxygen = FMath::Clamp(CurrentOxygen + Amount, 0.0f, MaxOxygen);
+	CurrentOxygen = FMath::Clamp(CurrentOxygen + Amount, 0.0f, MaxOxygen);
 }
 
 void APlayerSubmarine::StraightenBoatLevel()
