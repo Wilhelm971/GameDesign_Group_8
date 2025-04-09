@@ -5,8 +5,6 @@
 
 #include "CPP_InteractableObjectComponent.h"
 
-
-
 // Sets default values for this component's properties
 UCPP_CharacterInteractionComponent::UCPP_CharacterInteractionComponent()
 {

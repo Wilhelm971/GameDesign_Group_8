@@ -1,13 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Objects/CPP_LockedDoor.h"
-
-#include "FrameTypes.h"
-#include "MaterialHLSLTree.h"
+#include "Objects/CPP_PuzzleLockedActor.h"
 
 // Sets default values
-ACPP_LockedDoor::ACPP_LockedDoor()
+ACPP_PuzzleLockedActor::ACPP_PuzzleLockedActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -21,7 +18,7 @@ ACPP_LockedDoor::ACPP_LockedDoor()
 }
 
 // Called when the game starts or when spawned
-void ACPP_LockedDoor::BeginPlay()
+void ACPP_PuzzleLockedActor::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -29,7 +26,7 @@ void ACPP_LockedDoor::BeginPlay()
 	// Bind the OpenDoor function to the OnPuzzleSolved event
 	if (LinkedPuzzleManager)
 	{
-		LinkedPuzzleManager->OnPuzzleSolved.AddDynamic(this, &ACPP_LockedDoor::OpenDoor);
+		LinkedPuzzleManager->OnPuzzleSolved.AddDynamic(this, &ACPP_PuzzleLockedActor::PuzzleSolved);
 	}
 	else
 	{
@@ -42,24 +39,5 @@ void ACPP_LockedDoor::BeginPlay()
 
 }
 
-// Called every frame
-void ACPP_LockedDoor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	if (bCanOpen)
-	{
-		FVector NewPosition = FMath::VInterpTo(GetActorLocation(),EndingLocation, DeltaTime, OpeningSpeed);
-		SetActorLocation(NewPosition);
-		if (NewPosition == EndingLocation)
-		{
-			bCanOpen = false;
-			PrimaryActorTick.bCanEverTick = false;
-		}
-	}
-}
 
-void ACPP_LockedDoor::OpenDoor()
-{
-	bCanOpen = true;
-}
 
