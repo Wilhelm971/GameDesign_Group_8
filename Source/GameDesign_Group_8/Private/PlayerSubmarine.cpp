@@ -83,7 +83,7 @@ void APlayerSubmarine::Tick(float DeltaTime)
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor:: Red, FString::Printf(TEXT("Oxygen: %.1f / %.1f"), CurrentOxygen, MaxOxygen));
 
 		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	
+		
 		if (HUDWidgetClass)
 		{
 			HUDWidget = CreateWidget<UGameHUDWidget>(PlayerController, HUDWidgetClass);

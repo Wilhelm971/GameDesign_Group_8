@@ -33,11 +33,10 @@ class GAMEDESIGN_GROUP_8_API AInGameHUD : public AHUD
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> HUDWidgetClass;
 
-	private:
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
+	UGameHUDWidget* HUDWidgetRef; // This is the reference the pawn will use
 
-	UGameHUDWidget* HUDWidget;
-
-public:
+	
 	
 	UFUNCTION()
 	void SetVisibility(bool bVisibility);

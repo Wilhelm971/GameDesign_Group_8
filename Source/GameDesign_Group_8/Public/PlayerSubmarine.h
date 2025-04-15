@@ -145,7 +145,7 @@ protected:
 	UPROPERTY()
 	UUserWidget* HUDWidget;
 
-
+protected:
 	// A boolean to check if the game is paused
 	bool bIsPaused;
 

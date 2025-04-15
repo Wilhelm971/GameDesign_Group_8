@@ -12,32 +12,32 @@ void AInGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-/*
+
 	if (HUDWidgetClass)
 	{
-		HUDWidget = CreateWidget<UGameHUDWidget>(GetWorld(), HUDWidgetClass);
-		if (HUDWidget)
+		HUDWidgetRef = CreateWidget<UGameHUDWidget>(GetWorld(), HUDWidgetClass);
+		if (HUDWidgetRef)
 		{
-			HUDWidget-> AddToViewport();
+			HUDWidgetRef-> AddToViewport();
 		}
 	}
-	*/
+	
 	
 }
 
 void AInGameHUD::UpdateShellCount(int32 Value)
 {
-	if (HUDWidget)
+	if (HUDWidgetRef)
 	{
-		HUDWidget->UpdateShellCount(Value);
+		HUDWidgetRef->UpdateShellCount(Value);
 	}
 }
 
 void AInGameHUD::SetVisibility(bool bVisibility)
 {
-	if (HUDWidget)
+	if (HUDWidgetRef)
 	{
-		HUDWidget -> SetVisibility(bVisibility ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+		HUDWidgetRef -> SetVisibility(bVisibility ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 	}
 }
 
