@@ -87,14 +87,17 @@ void APlayerSubmarine::Tick(float DeltaTime)
 		if (HUDWidgetClass)
 		{
 			HUDWidget = CreateWidget<UGameHUDWidget>(PlayerController, HUDWidgetClass);
+/*
 			if (HUDWidget)
 			{
 				if (UGameHUDWidget* GameHUD = Cast<UGameHUDWidget>(HUDWidget))
 				{
-					GameHUD->UpdateOxygen(CurrentOxygen, MaxOxygen);
+					float Percent = FMath::Clamp(CurrentOxygen/MaxOxygen, 0.f, 1.f);
+					GameHUD -> OxygenPercent = Percent;
 					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Check");
 				}
 			}
+			*/
 			
 		}
 

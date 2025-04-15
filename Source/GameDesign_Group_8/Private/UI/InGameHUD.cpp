@@ -12,6 +12,7 @@ void AInGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
+/*
 	if (HUDWidgetClass)
 	{
 		HUDWidget = CreateWidget<UGameHUDWidget>(GetWorld(), HUDWidgetClass);
@@ -20,6 +21,7 @@ void AInGameHUD::BeginPlay()
 			HUDWidget-> AddToViewport();
 		}
 	}
+	*/
 	
 }
 

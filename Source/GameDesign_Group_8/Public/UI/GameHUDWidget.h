@@ -5,7 +5,11 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Runtime/UMG/Public/UMG.h"
+
+#include "Components/RadialSlider.h"
+
 #include "GameHUDWidget.generated.h"
+
 
 /**
  * 
@@ -33,8 +37,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TXTShell;
 	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UProgressBar* OxygenBar;
+	URadialSlider* OxygenRadial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	float OxygenPercent;
 
 
 	
