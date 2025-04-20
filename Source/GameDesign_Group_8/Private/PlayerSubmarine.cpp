@@ -22,7 +22,7 @@ APlayerSubmarine::APlayerSubmarine()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Creating the meash, camera and collision
+	// Creating the mesh, camera and collision
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
 	Box -> SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
 
@@ -47,17 +47,18 @@ APlayerSubmarine::APlayerSubmarine()
 
 	// Defining MovementSpeed & Oxygen
 
-	MoveForce = 30000.0f;
+	MoveForce = 10000.0f;
 	TorqueForce = 200000.0f;
 	ElevateForce = 15000.0f;
 
 	MaxOxygen = 100.0f;
 	CurrentOxygen = 60.0f;
-	OxygenDrainRate = 4.0f;
+	OxygenDrainRate = 1.2f;
 
 
 	
 	bIsPaused = false;
+	bLostGame = false;
 
 }
 
@@ -83,7 +84,9 @@ void APlayerSubmarine::Tick(float DeltaTime)
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor:: Red, FString::Printf(TEXT("Oxygen: %.1f / %.1f"), CurrentOxygen, MaxOxygen));
 
 		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-		
+
+
+	
 		if (HUDWidgetClass)
 		{
 			HUDWidget = CreateWidget<UGameHUDWidget>(PlayerController, HUDWidgetClass);
@@ -101,14 +104,14 @@ void APlayerSubmarine::Tick(float DeltaTime)
 			
 		}
 
-		if (CurrentOxygen <= 0.0f)
+		if (CurrentOxygen <= 0.0f && bLostGame == false)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 7.0f, FColor::Red, "Oxygen Drained !");
+			bLostGame = true;
 			LostGame();
 		}
 	}
 
-	//StraightenBoatLevel();
 
 }
 
@@ -153,59 +156,48 @@ void APlayerSubmarine::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 
 
-void APlayerSubmarine::Move_Implementation(const FInputActionValue& InputValue)
+void APlayerSubmarine::Move(const FInputActionValue& InputValue)
 {
-	FVector2d InputVector = InputValue.Get<FVector2D>();
+	const float Input = InputValue.Get<float>();
 
 	if (IsValid(Controller))
 	{
-
-		FVector ForwardsForce = InputVector.Y * MoveForce * SubmarineMesh -> GetForwardVector();
-		
-		
-		if (InputVector.Y < 0)
+		if (FMath::Abs(Input) > KINDA_SMALL_NUMBER)
 		{
-			FVector BackwardsForce = ForwardsForce * 0.5f;
-			SubmarineMesh->AddForce(BackwardsForce);
-			
-			
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Moving Backwards")));
-		}
-
-		else
-		{
-			SubmarineMesh->AddForce(ForwardsForce);
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Moving Forwards")));
-	
+			FVector ForceDirection = GetActorForwardVector();
+			FVector ForceToAdd = ForceDirection * Input * MoveForce;
+			SubmarineMesh -> AddForce(ForceToAdd);
 		}
 	}
-	
 }
 
 void APlayerSubmarine::Rotate_Implementation(const FInputActionValue& InputValue)
 {
 
-	FVector InputVector = InputValue.Get<FVector>();
+	const float Input = InputValue.Get<float>();
 	if (IsValid(Controller))
 	{
-		SubmarineMesh->AddTorqueInRadians(SubmarineMesh->GetUpVector() * TorqueForce * InputVector);
-
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Rotating")));
+		FVector ForceDirection = GetActorUpVector();
+		FVector ForceToAdd = ForceDirection * Input * TorqueForce;
+		SubmarineMesh->AddTorqueInRadians(ForceToAdd);
 	}
 }
 
 void APlayerSubmarine::Elevate_Implementation(const FInputActionValue& InputValue)
 {
 
-	FVector2d InputVector = InputValue.Get<FVector2D>();
+	const float Input = InputValue.Get<float>();
+
 
 	if (IsValid(Controller))
 	{
-		SubmarineMesh->AddForce(ElevateForce * InputVector.Y * GetActorUpVector());
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Elevating")));
+		if (FMath::Abs(Input) > KINDA_SMALL_NUMBER)
+		{
+			FVector ForceDirection = GetActorUpVector();
+			FVector ForceToAdd = ForceDirection * Input * ElevateForce;
+			SubmarineMesh -> AddForce(ForceToAdd);
+		}
 	}
-	
-
 }
 
 void APlayerSubmarine::Look_Implementation(const FInputActionValue& InputValue)
@@ -214,7 +206,6 @@ void APlayerSubmarine::Look_Implementation(const FInputActionValue& InputValue)
 
 	if (IsValid(Controller))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Looking")));
 		AddControllerYawInput(InputVector.X);
 		AddControllerPitchInput(InputVector.Y);
 	}
@@ -287,16 +278,6 @@ void APlayerSubmarine::RefillOxygen(float Amount)
 	CurrentOxygen = FMath::Clamp(CurrentOxygen + Amount, 0.0f, MaxOxygen);
 }
 
-void APlayerSubmarine::StraightenBoatLevel()
-{
-/*
-	if (SubmarineMesh->GetRelativeRotation().Yaw > 0)
-	{
-		
-		SubmarineMesh -> SetRelativeRotation()
-	}
-	*/
-}
 
 
 void APlayerSubmarine::InteractWithObject()

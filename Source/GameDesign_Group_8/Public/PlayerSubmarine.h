@@ -32,9 +32,6 @@ public:
 
 
 	
-public:
-	// Sets default values for this pawn's properties
-	APlayerSubmarine();
 
 protected:
 	// Called when the game starts or when spawned
@@ -47,6 +44,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Sets default values for this pawn's properties
+	APlayerSubmarine();
 
 
 
@@ -89,7 +88,7 @@ protected:
 	// Movement Functions
 protected:
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Movement")
+	UFUNCTION(Category = "Movement")
 	void Move(const FInputActionValue& InputValue);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Movement")
@@ -102,15 +101,22 @@ protected:
 	void Look(const FInputActionValue& InputValue);
 
 	
-	void StraightenBoatLevel();
-	
 
 
 	// Movement speed
+	UPROPERTY(EditAnywhere, Category = "Movement")
 	float TorqueForce;
+	UPROPERTY(EditAnywhere, Category = "Movement")
 	float MoveForce;
+	UPROPERTY(EditAnywhere, Category = "Movement")
 	float ElevateForce;
 
+	FVector CurrentVelocity;
+	FVector TargetDirection;
+	float CurrentThrottle;
+
+
+	
 	// Function for interactions
 	void InteractWithObject();
 
@@ -148,6 +154,7 @@ protected:
 protected:
 	// A boolean to check if the game is paused
 	bool bIsPaused;
+	bool bLostGame;
 
 
 
@@ -158,7 +165,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Oxygen")
 	float MaxOxygen;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Oxygen")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Oxygen")
 	float CurrentOxygen;
 
 	UPROPERTY(EditAnywhere, Category = "Oxygen")
