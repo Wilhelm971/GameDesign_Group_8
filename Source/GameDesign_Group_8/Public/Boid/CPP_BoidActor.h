@@ -21,7 +21,7 @@ enum class EFishBehaviorMode : uint8
 };
 
 UCLASS()
-class GAMEDESIGN_GROUP_8_API ACPP_BoidActor : public AActor
+class GAMEDESIGN_GROUP_8_API ACPP_BoidActor : public APawn
 {
 	GENERATED_BODY()
     
@@ -37,8 +37,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FishAI")
-	UStaticMeshComponent* FishMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FishAI")
+	USkeletalMeshComponent* FishMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FishAI")
 	FVector CurrentVector;

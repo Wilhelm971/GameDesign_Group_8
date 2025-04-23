@@ -8,7 +8,7 @@ ACPP_BoidActor::ACPP_BoidActor()
     PrimaryActorTick.bCanEverTick = true;
     
     RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-    FishMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FishMesh"));
+    FishMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FishMesh"));
     FishMesh->SetupAttachment(RootComponent);
     
     FishMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
