@@ -5,6 +5,7 @@
     <projectFile profileName="EpicGames.AspNet">../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.AspNet/EpicGames.AspNet.csproj</projectFile>
     <projectFile kind="Docker">../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile kind="Docker">../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/GameDesign_Group_8.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -23,6 +24,10 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/String/FormatStringSan.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Datasmith/DatasmithCore/Public/DatasmithDefinitions.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -128,6 +133,17 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (1)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="C:\UnrealEngine\GameDesign_Group_8" />
+          <option name="sourceFilePath" value="../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -164,9 +180,19 @@
       <workItem from="1743508145665" duration="1616000" />
       <workItem from="1743620087559" duration="9417000" />
       <workItem from="1743718301285" duration="1629000" />
-      <workItem from="1743951476832" duration="256000" />
-      <workItem from="1743951864685" duration="472000" />
-      <workItem from="1744015968644" duration="1961000" />
+      <workItem from="1743936610313" duration="11545000" />
+      <workItem from="1743956741600" duration="17481000" />
+      <workItem from="1744028533635" duration="8714000" />
+      <workItem from="1744097347746" duration="4965000" />
+      <workItem from="1744116376427" duration="4016000" />
+      <workItem from="1744123911817" duration="6442000" />
+      <workItem from="1744232016909" duration="351000" />
+      <workItem from="1744721526082" duration="5493000" />
+      <workItem from="1744730281562" duration="1130000" />
+      <workItem from="1744735664393" duration="692000" />
+      <workItem from="1745076048518" duration="13203000" />
+      <workItem from="1745171694307" duration="2808000" />
+      <workItem from="1745195117515" duration="4782000" />
     </task>
     <servers />
   </component>

@@ -7,7 +7,13 @@
 		{
 			"Name": "GameDesign_Group_8",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UMG",
+				"Engine",
+				"FunctionalTesting",
+				"AdvancedWidgets"
+			]
 		}
 	],
 	"Plugins": [
