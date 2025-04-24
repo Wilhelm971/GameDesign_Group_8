@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CPP_InteractableObjectBase.h"
 #include "Interact_Interface.h"
 #include "GameFramework/Actor.h"
 #include "CPP_InteractableObjectComponent.h"
-#include "Components/SphereComponent.h"
-#include "CPPInteractableObject.generated.h"
+#include "CPP_PickUpActor.generated.h"
 
 UCLASS()
-class GAMEDESIGN_GROUP_8_API ACPPInteractableObject : public AActor, public IInteract_Interface
+class GAMEDESIGN_GROUP_8_API ACPP_PickUpActor : public ACPP_InteractableObjectBase
 {
 	GENERATED_BODY()
 
@@ -29,20 +29,10 @@ class GAMEDESIGN_GROUP_8_API ACPPInteractableObject : public AActor, public IInt
 	
 	FVector StartSize;
 	FVector TargetSize;
-	
-protected:
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, meta = (AllowPrivateAccess = "True"))
-	UStaticMeshComponent* StaticMesh;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta  = (AllowPrivateAccess = "True"))
-	USphereComponent* CollisionSphere;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "True"))
-	UCPP_InteractableObjectComponent* InteractableObjectComponent;
 public:	
 	// Sets default values for this actor's properties
-	ACPPInteractableObject();
+	ACPP_PickUpActor();
 
 protected:
 	// Called when the game starts or when spawned
