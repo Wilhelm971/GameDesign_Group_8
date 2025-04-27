@@ -28,6 +28,7 @@ ACPP_PuzzleBase::ACPP_PuzzleBase()
 	
 }
 
+//Made to be overridden in child class
 void ACPP_PuzzleBase::Activate()
 {
 }

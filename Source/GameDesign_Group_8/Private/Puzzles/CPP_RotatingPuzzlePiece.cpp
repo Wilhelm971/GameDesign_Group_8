@@ -43,7 +43,7 @@ void ACPP_RotatingPuzzlePiece::Activate()
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("Activate() called for RotatingPuzzlePiece"));
 	RotationAmount = 360/RotationMaxCount;
 	//Starts rotation function if it's not already rotating
-	if (!bIsRotating)
+	if (!bIsRotating && bIsActive)
 	{
 		bIsRotating = true;
 		CurrentTime = 0.0f;

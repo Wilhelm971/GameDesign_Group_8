@@ -23,6 +23,8 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "Interaction")
 	UMaterialInterface* HighlightMaterial;
 
+	void SetHighlightMaterial(UMaterialInterface* NewMaterial);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
