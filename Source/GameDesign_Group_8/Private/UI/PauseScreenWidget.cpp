@@ -73,6 +73,15 @@ void UPauseScreenWidget::OnResumeClicked()
 void UPauseScreenWidget::OnSettingsClicked()
 {
 	UE_LOG(LogTemp, Display, TEXT("SettingsClicked"));
+
+	if ( SettingsWidgetClass)
+	{
+		UUserWidget* SettingsWidget = CreateWidget<UUserWidget> (GetWorld(), SettingsWidgetClass);
+		if (SettingsWidget)
+		{
+			SettingsWidget -> AddToViewport();
+		}
+	}
 }
 
 
