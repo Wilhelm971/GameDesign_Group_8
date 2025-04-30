@@ -28,7 +28,7 @@ APlayerSubmarine::APlayerSubmarine()
 
 	Box -> SetCollisionProfileName(TEXT("Pawn"));
 
-	SubmarineMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SubmarineMesh"));
+	SubmarineMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SubmarineMesh"));
 	SubmarineMesh -> SetupAttachment(RootComponent);
 	SubmarineMesh -> SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
