@@ -21,6 +21,11 @@ UCPP_InteractableObjectComponent::UCPP_InteractableObjectComponent()
 
 }
 
+void UCPP_InteractableObjectComponent::SetHighlightMaterial(UMaterialInterface* NewMaterial)
+{
+	HighlightMaterial = NewMaterial;
+}
+
 // Called when the game starts
 void UCPP_InteractableObjectComponent::BeginPlay()
 {

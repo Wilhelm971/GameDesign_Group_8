@@ -25,7 +25,7 @@ class GAMEDESIGN_GROUP_8_API ACPP_RotatingPuzzlePiece : public ACPP_PuzzleBase
 	
 public:
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Position")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Position")
 	int32 RotationPosition;
 
 	//How many rotations to rotate the piece fully

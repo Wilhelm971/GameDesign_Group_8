@@ -1,50 +1,28 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Objects/CPPInteractableObject.h"
+#include "Objects/CPP_PickUpActor.h"
 
 #include "CPPCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
-ACPPInteractableObject::ACPPInteractableObject()
+ACPP_PickUpActor::ACPP_PickUpActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("Static Mesh");
-	StaticMesh->SetupAttachment(RootComponent);
-	//StaticMesh->SetCollisionResponseToChannel(ECC_Pawn,ECR_Ignore);
-	//StaticMesh->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
-	StaticMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
-	StaticMesh->SetCollisionResponseToChannel(ECC_Visibility,ECR_Block);
-
-	CollisionSphere = CreateDefaultSubobject<USphereComponent>("Collision Sphere");
-	CollisionSphere->SetupAttachment(StaticMesh);
-	CollisionSphere->SetGenerateOverlapEvents(true);
-	CollisionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
-	CollisionSphere->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
-	
-	InteractableObjectComponent = CreateDefaultSubobject<UCPP_InteractableObjectComponent>(TEXT("InteractComponent"));
+ 	
 }
 
 // Called when the game starts or when spawned
-void ACPPInteractableObject::BeginPlay()
+void ACPP_PickUpActor::BeginPlay()
 {
     Super::BeginPlay();
-
-	//Passes the collision shape to the component for logic handeling of Begin and End Overlap
-	if (InteractableObjectComponent && CollisionSphere)
-	{
-		InteractableObjectComponent->SetCollisionShape(CollisionSphere);
-	}
-
+	
     StartLocation = GetActorLocation();
     StartSize = GetActorScale3D();
     TargetSize = FVector(0, 0, 0);
 }
 
-void ACPPInteractableObject::Tick(float DeltaTime)
+void ACPP_PickUpActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
     if (bShouldMove) // Add a flag to control when movement starts
@@ -59,7 +37,7 @@ void ACPPInteractableObject::Tick(float DeltaTime)
 
 }
 
-void ACPPInteractableObject::OnInteract_Implementation(AActor* CausingActor)
+void ACPP_PickUpActor::OnInteract_Implementation(AActor* CausingActor)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "Interacted With Object");
     PrimaryActorTick.bCanEverTick = true;
@@ -86,12 +64,12 @@ void ACPPInteractableObject::OnInteract_Implementation(AActor* CausingActor)
 	//GetWorld()->GetTimerManager().SetTimer(BounceMoveTimerHandle, this, &ACPPInteractableObject::UpdateMovementAndRotation, 0.01f, true);
 
 	// Schedule destruction
-	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, this, &ACPPInteractableObject::DestroyObject, Duration, false);
+	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, this, &ACPP_PickUpActor::DestroyObject, Duration, false);
 
 	
 }
 
-void ACPPInteractableObject::UpdateMovementAndRotation(float DeltaTime)
+void ACPP_PickUpActor::UpdateMovementAndRotation(float DeltaTime)
 {
     // Increase time smoothly using DeltaTime
     ElapsedTime += DeltaTime;
@@ -119,12 +97,12 @@ void ACPPInteractableObject::UpdateMovementAndRotation(float DeltaTime)
     SetActorScale3D(NewScale);
 }
 
-void ACPPInteractableObject::DestroyObject()
+void ACPP_PickUpActor::DestroyObject()
 {
     Destroy();
 }
 
-void ACPPInteractableObject::IdleMovement(float DeltaTime)
+void ACPP_PickUpActor::IdleMovement(float DeltaTime)
 {
     ElapsedTime += DeltaTime;
 

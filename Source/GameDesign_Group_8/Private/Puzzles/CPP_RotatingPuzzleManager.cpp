@@ -30,6 +30,21 @@ void ACPP_RotatingPuzzleManager::CheckPuzzleState()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Puzzle Solved!"));
 		OnPuzzleSolved.Broadcast(); // Trigger the delegate
+		bPuzzleSolved = true;
+		
+		//Set puzzle pieces as inactive and disables Highlight materials
+		for (int32 i = 0; i < PuzzlePieces.Num(); i++)
+		{
+			if (PuzzlePieces[i])
+			{
+				PuzzlePieces[i]->bIsActive = false;
+				if (UCPP_InteractableObjectComponent* InteractableComponent = PuzzlePieces[i]->FindComponentByClass<UCPP_InteractableObjectComponent>())
+				{
+					InteractableComponent->SetHighlightMaterial(nullptr);
+				}
+			}
+		}
+		
 		PrimaryActorTick.bCanEverTick = false;
 	}
 	else
