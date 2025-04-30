@@ -9,8 +9,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-
 #include "UI/InGameHUD.h"
 #include "UI/PauseScreenWidget.h"
 #include "UI/GameHUDWidget.h"
@@ -21,19 +21,21 @@ APlayerSubmarine::APlayerSubmarine()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	BoxSize = FVector(32.0f, 32.0f, 32.0f);
+	
 	// Creating the mesh, camera and collision
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
-	Box -> SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
-
-	Box -> SetCollisionProfileName(TEXT("Pawn"));
+	Box -> SetBoxExtent(BoxSize);
+	Box -> SetSimulatePhysics(true);
+	Box -> SetEnableGravity(false); // Submarine is underwater
+	Box -> SetCollisionProfileName(TEXT("PhysicsActor"));
+	
+	RootComponent = Box;
 
 	SubmarineMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SubmarineMesh"));
 	SubmarineMesh -> SetupAttachment(RootComponent);
 	SubmarineMesh -> SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	RootComponent = SubmarineMesh;
-
+	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm -> SetupAttachment(RootComponent);
 	SpringArm -> bUsePawnControlRotation = true;
@@ -47,9 +49,9 @@ APlayerSubmarine::APlayerSubmarine()
 
 	// Defining MovementSpeed & Oxygen
 
-	MoveForce = 10000.0f;
-	TorqueForce = 200000.0f;
-	ElevateForce = 15000.0f;
+	MoveForce = 100000.0f;
+	TorqueForce = 4000000.0;
+	ElevateForce = 48000.0f;
 
 	MaxOxygen = 100.0f;
 	CurrentOxygen = 60.0f;
@@ -164,9 +166,9 @@ void APlayerSubmarine::Move(const FInputActionValue& InputValue)
 	{
 		if (FMath::Abs(Input) > KINDA_SMALL_NUMBER)
 		{
-			FVector ForceDirection = GetActorForwardVector();
+			FVector ForceDirection = GetActorForwardVector().GetSafeNormal();
 			FVector ForceToAdd = ForceDirection * Input * MoveForce;
-			SubmarineMesh -> AddForce(ForceToAdd);
+			Box -> AddForce(ForceToAdd);
 		}
 	}
 }
@@ -177,9 +179,9 @@ void APlayerSubmarine::Rotate_Implementation(const FInputActionValue& InputValue
 	const float Input = InputValue.Get<float>();
 	if (IsValid(Controller))
 	{
-		FVector ForceDirection = GetActorUpVector();
+		FVector ForceDirection = GetActorUpVector().GetSafeNormal();
 		FVector ForceToAdd = ForceDirection * Input * TorqueForce;
-		SubmarineMesh->AddTorqueInRadians(ForceToAdd);
+		Box -> AddTorqueInRadians(ForceToAdd);
 	}
 }
 
@@ -193,9 +195,9 @@ void APlayerSubmarine::Elevate_Implementation(const FInputActionValue& InputValu
 	{
 		if (FMath::Abs(Input) > KINDA_SMALL_NUMBER)
 		{
-			FVector ForceDirection = GetActorUpVector();
+			FVector ForceDirection = GetActorUpVector().GetSafeNormal();
 			FVector ForceToAdd = ForceDirection * Input * ElevateForce;
-			SubmarineMesh -> AddForce(ForceToAdd);
+			Box -> AddForce(ForceToAdd);
 		}
 	}
 }

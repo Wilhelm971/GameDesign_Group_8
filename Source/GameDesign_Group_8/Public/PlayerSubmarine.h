@@ -22,14 +22,14 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* SpringArm;
 	
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* Box;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* SubmarineMesh;
 
 
-
+	
 
 	
 
@@ -110,6 +110,10 @@ protected:
 	float MoveForce;
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float ElevateForce;
+
+	UPROPERTY(EditAnywhere, Category = "PhysicsBox")
+	FVector3d BoxSize;
+
 
 	FVector CurrentVelocity;
 	FVector TargetDirection;
