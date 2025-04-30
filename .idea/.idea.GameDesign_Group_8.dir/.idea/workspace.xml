@@ -52,7 +52,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
         <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.5\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\Martin Solvang\Documents\GitHub\GameDesign_Group_8\GameDesign_Group_8.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\marti\Documents\Unreal Projects\GameDesign_Group_8\GameDesign_Group_8.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.5" />
         <option name="PASS_PARENT_ENVS" value="1" />
@@ -64,7 +64,7 @@
         <option name="CONFIGURATION" value="DebugGame" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Users\Martin Solvang\Documents\GitHub\GameDesign_Group_8\Binaries\Win64\GameDesign_Group_8-Win64-DebugGame.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\marti\Documents\Unreal Projects\GameDesign_Group_8\Binaries\Win64\GameDesign_Group_8-Win64-DebugGame.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.5" />
@@ -78,7 +78,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
         <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.5\Engine\Binaries\Win64\UnrealEditor.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\Martin Solvang\Documents\GitHub\GameDesign_Group_8\GameDesign_Group_8.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\marti\Documents\Unreal Projects\GameDesign_Group_8\GameDesign_Group_8.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.5" />
         <option name="PASS_PARENT_ENVS" value="1" />
@@ -90,7 +90,7 @@
         <option name="CONFIGURATION" value="Development" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Users\Martin Solvang\Documents\GitHub\GameDesign_Group_8\Binaries\Win64\GameDesign_Group_8.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\marti\Documents\Unreal Projects\GameDesign_Group_8\Binaries\Win64\GameDesign_Group_8.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.5" />
@@ -103,7 +103,7 @@
         <option name="CONFIGURATION" value="Shipping" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Users\Martin Solvang\Documents\GitHub\GameDesign_Group_8\Binaries\Win64\GameDesign_Group_8-Win64-Shipping.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\marti\Documents\Unreal Projects\GameDesign_Group_8\Binaries\Win64\GameDesign_Group_8-Win64-Shipping.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.5" />
@@ -137,6 +137,7 @@
       <workItem from="1745433688940" duration="2787000" />
       <workItem from="1745500026988" duration="4609000" />
       <workItem from="1745773714742" duration="7775000" />
+      <workItem from="1745826800718" duration="1956000" />
     </task>
     <servers />
   </component>
