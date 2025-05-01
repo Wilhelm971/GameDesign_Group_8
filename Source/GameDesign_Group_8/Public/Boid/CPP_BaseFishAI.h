@@ -3,14 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "Components/SplineComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/TargetPoint.h"
-#include "CPP_BoidActor.generated.h"
-
-class ACPP_BoidGridManager;
+#include "GameFramework/Pawn.h"
+#include "CPP_BaseFishAI.generated.h"
 
 UENUM(BlueprintType)
 enum class EFishBehaviorMode : uint8
@@ -20,13 +14,16 @@ enum class EFishBehaviorMode : uint8
 	FollowSpline    UMETA(DisplayName = "Follow Spline")
 };
 
-UCLASS()
-class GAMEDESIGN_GROUP_8_API ACPP_BoidActor : public APawn
+class USplineComponent;
+
+UCLASS(Abstract)
+class GAMEDESIGN_GROUP_8_API ACPP_BaseFishAI : public APawn
 {
 	GENERATED_BODY()
-    
-public:    
-	ACPP_BoidActor();
+
+public:
+	// Sets default values for this pawn's properties
+	ACPP_BaseFishAI();
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,9 +33,6 @@ protected:
 public:    
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FishAI")
-	USkeletalMeshComponent* FishMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FishAI")
 	FVector CurrentVector;

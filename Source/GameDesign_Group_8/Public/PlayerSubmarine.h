@@ -180,7 +180,7 @@ public:
 
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintNativeEvent, Category = "Oxygen")
 	void LostGame();
 	
 	

@@ -287,7 +287,7 @@ void APlayerSubmarine::InteractWithObject()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Interact")));
 }
 
-void APlayerSubmarine::LostGame()
+void APlayerSubmarine::LostGame_Implementation()
 {
 	UE_LOG(LogTemp, Display, TEXT("You Lost The Game!"));
 }
