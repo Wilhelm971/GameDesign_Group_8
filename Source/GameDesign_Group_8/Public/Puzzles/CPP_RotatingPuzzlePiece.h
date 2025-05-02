@@ -17,7 +17,7 @@ class GAMEDESIGN_GROUP_8_API ACPP_RotatingPuzzlePiece : public ACPP_PuzzleBase
 	float CurrentTime;
 	float RotationTime;
 	
-	UPROPERTY(EditAnywhere, Category = "Rotation")
+	UPROPERTY(EditAnywhere, Category = "Puzzle")
 	float RotationSpeed;
 	
 	FRotator StartRotation;
@@ -25,11 +25,11 @@ class GAMEDESIGN_GROUP_8_API ACPP_RotatingPuzzlePiece : public ACPP_PuzzleBase
 	
 public:
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Position")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Puzzle")
 	int32 RotationPosition;
 
 	//How many rotations to rotate the piece fully
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Position")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Puzzle")
 	int32 RotationMaxCount;
 
 	double RotationAmount;

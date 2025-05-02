@@ -47,7 +47,7 @@ void ACPP_RotatingPuzzlePiece::Activate()
 	{
 		bIsRotating = true;
 		CurrentTime = 0.0f;
-		StartRotation = GetActorRotation();
+		StartRotation =	StaticMesh->GetRelativeRotation();
 		TargetRotation = StartRotation + FRotator(0, RotationAmount, 0);
 		
 	}
@@ -56,21 +56,21 @@ void ACPP_RotatingPuzzlePiece::Activate()
 void ACPP_RotatingPuzzlePiece::Rotate(float DeltaTime)
 {
 	// Interpolate using RInterpConstantTo for constant rotation speed
-	FRotator NewRotation = FMath::RInterpConstantTo(GetActorRotation(), TargetRotation, DeltaTime, RotationSpeed);
+	FRotator NewRotation = FMath::RInterpConstantTo(StaticMesh->GetRelativeRotation(), TargetRotation, DeltaTime, RotationSpeed);
 
 	// Apply the new rotation
-	SetActorRotation(NewRotation);
+	StaticMesh->SetRelativeRotation(NewRotation);
 
 	// Stop rotating when close enough to the target
 	if (NewRotation.Equals(TargetRotation, 1.0f)) // 1 degree tolerance
 	{
 		bIsRotating = false;
-		SetActorRotation(TargetRotation); // Ensure exact match
+		StaticMesh->SetRelativeRotation(TargetRotation); // Ensure exact match
 		RotationPosition++;
 		if (RotationPosition > RotationMaxCount-1)
 		{
 			RotationPosition = 0;
-			SetActorRotation(FRotator(0, 0, 0));
+			StaticMesh->SetRelativeRotation(FRotator(0, 0, 0));
 		}
 
 		OnStateChanged.Broadcast(this);
