@@ -22,14 +22,14 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* SpringArm;
 	
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* Box;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* SubmarineMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* SubmarineMesh;
 
 
-
+	
 
 	
 
@@ -111,6 +111,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float ElevateForce;
 
+	UPROPERTY(EditAnywhere, Category = "PhysicsBox")
+	FVector3d BoxSize;
+
+
 	FVector CurrentVelocity;
 	FVector TargetDirection;
 	float CurrentThrottle;
@@ -176,7 +180,7 @@ public:
 
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintNativeEvent, Category = "Oxygen")
 	void LostGame();
 	
 	

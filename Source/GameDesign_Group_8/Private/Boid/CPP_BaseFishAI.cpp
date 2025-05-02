@@ -1,19 +1,14 @@
-#include "Boid/CPP_BoidActor.h"
-#include "DrawDebugHelpers.h"
-#include "VectorUtil.h"
-#include "Kismet/KismetMathLibrary.h"
+// Fill out your copyright notice in the Description page of Project Settings.
 
-ACPP_BoidActor::ACPP_BoidActor()
+#include "Components/SplineComponent.h"
+#include "Boid/CPP_BaseFishAI.h"
+
+
+ACPP_BaseFishAI::ACPP_BaseFishAI()
 {
     PrimaryActorTick.bCanEverTick = true;
     
     RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-    FishMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FishMesh"));
-    FishMesh->SetupAttachment(RootComponent);
-    
-    FishMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    FishMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
-    FishMesh->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
     
     CurrentVector = FVector::ZeroVector;
     CurrentAvoidanceDirection = FVector::ZeroVector;
@@ -37,7 +32,7 @@ ACPP_BoidActor::ACPP_BoidActor()
     MovementDirection = FVector::ZeroVector;
 }
 
-void ACPP_BoidActor::BeginPlay()
+void ACPP_BaseFishAI::BeginPlay()
 {
     Super::BeginPlay();
     
@@ -56,21 +51,21 @@ void ACPP_BoidActor::BeginPlay()
     GetWorld()->GetTimerManager().SetTimer(
          TimerHandle,
          this,
-         &ACPP_BoidActor::CheckObstacles,
+         &ACPP_BaseFishAI::CheckObstacles,
          0.1f,
          true,
          RandomDelay
      );
 }
 
-void ACPP_BoidActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void ACPP_BaseFishAI::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 
     Super::EndPlay(EndPlayReason);
 }
 
-void ACPP_BoidActor::SetSplineToFollow(const AActor* NewSplineActor)
+void ACPP_BaseFishAI::SetSplineToFollow(const AActor* NewSplineActor)
 {
     if (NewSplineActor)
     {
@@ -82,7 +77,7 @@ void ACPP_BoidActor::SetSplineToFollow(const AActor* NewSplineActor)
     }
 }
 
-void ACPP_BoidActor::CheckObstacles()
+void ACPP_BaseFishAI::CheckObstacles()
 {
     const float RaycastDistance = 150.0f * (MovementSpeed / 100.0f) + 100; // Scale raycast distance with speed + an initial offset
     FVector CurrentLocation = GetActorLocation();
@@ -213,7 +208,7 @@ void ACPP_BoidActor::CheckObstacles()
     }
 }
 
-void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
+void ACPP_BaseFishAI::MoveAndRotate(float DeltaTime)
 {
     // Apply obstacle avoidance as a steering force
     if (!CurrentAvoidanceDirection.IsNearlyZero())
@@ -253,7 +248,7 @@ void ACPP_BoidActor::MoveAndRotate(float DeltaTime)
     }
 }
 
-void ACPP_BoidActor::FollowSpline(float DeltaTime)
+void ACPP_BaseFishAI::FollowSpline(float DeltaTime)
 {
     if (!SplineToFollow)
     {
@@ -294,7 +289,7 @@ void ACPP_BoidActor::FollowSpline(float DeltaTime)
 }
 
 
-void ACPP_BoidActor::Wander(float DeltaTime)
+void ACPP_BaseFishAI::Wander(float DeltaTime)
 {
     MovementDirection = CurrentVector.GetSafeNormal();
 
@@ -345,7 +340,7 @@ void ACPP_BoidActor::Wander(float DeltaTime)
 }
 
 
-void ACPP_BoidActor::FollowPlayer(float DeltaTime)
+void ACPP_BaseFishAI::FollowPlayer(float DeltaTime)
 {
     // Store current direction before applying forces
     MovementDirection = CurrentVector.GetSafeNormal();
@@ -401,7 +396,7 @@ void ACPP_BoidActor::FollowPlayer(float DeltaTime)
     }
 }
 
-void ACPP_BoidActor::Tick(float DeltaTime)
+void ACPP_BaseFishAI::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
@@ -437,5 +432,3 @@ void ACPP_BoidActor::Tick(float DeltaTime)
 
     
 }
-
-
