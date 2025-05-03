@@ -18,10 +18,7 @@ void UGameHUDWidget::NativeConstruct()
 
 void UGameHUDWidget::UpdateShellCount(int32 Value)
 {
-	if (TXTShell)
-	{
-		TXTShell->SetText(FText::FromString(FString::FromInt(Value) + "Shells collected"));
-	}
+
 }
 
 void UGameHUDWidget::UpdateOxygen(float Current, float Max)

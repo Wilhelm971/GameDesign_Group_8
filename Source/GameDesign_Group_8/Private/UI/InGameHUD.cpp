@@ -27,10 +27,7 @@ void AInGameHUD::BeginPlay()
 
 void AInGameHUD::UpdateShellCount(int32 Value)
 {
-	if (HUDWidgetRef)
-	{
-		HUDWidgetRef->UpdateShellCount(Value);
-	}
+
 }
 
 void AInGameHUD::SetVisibility(bool bVisibility)

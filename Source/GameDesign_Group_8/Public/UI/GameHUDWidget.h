@@ -32,10 +32,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateOxygen(float Current, float Max);
 	
-
-// protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* TXTShell;
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
