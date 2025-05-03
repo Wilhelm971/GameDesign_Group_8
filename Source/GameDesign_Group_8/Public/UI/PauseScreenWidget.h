@@ -52,6 +52,10 @@ public:
 	class UButton* QuitButton;
 
 
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UUserWidget> SettingsWidgetClass;
+	
+
 
 
 

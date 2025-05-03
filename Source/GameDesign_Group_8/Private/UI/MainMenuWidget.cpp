@@ -30,7 +30,7 @@ bool UMainMenuWidget::Initialize()
 
 void UMainMenuWidget::OnStartClicked()
 {
-	UGameplayStatics::OpenLevel(this, "UITesting");
+	UGameplayStatics::OpenLevel(this, "Prototyping");
 
 
 
@@ -42,6 +42,15 @@ void UMainMenuWidget::OnStartClicked()
 void UMainMenuWidget::OnSettingsClicked()
 {
 	UE_LOG(LogTemp, Display, TEXT("OnSettingsClicked"));
+
+	if ( SettingsWidgetClass)
+	{
+		UUserWidget* SettingsWidget = CreateWidget<UUserWidget> (GetWorld(), SettingsWidgetClass);
+		if (SettingsWidget)
+		{
+			SettingsWidget -> AddToViewport();
+		}
+	}
 }
 
 void UMainMenuWidget::OnQuitClicked()
