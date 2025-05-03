@@ -7,7 +7,7 @@
 #include "CPP_SequencePuzzlePiece.generated.h"
 
 
-UCLASS()
+UCLASS(Blueprintable)
 class GAMEDESIGN_GROUP_8_API ACPP_SequencePuzzlePiece : public ACPP_PuzzleBase
 {
 	GENERATED_BODY()
@@ -23,11 +23,11 @@ class GAMEDESIGN_GROUP_8_API ACPP_SequencePuzzlePiece : public ACPP_PuzzleBase
 
 public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
-	UMaterialInterface* ActiveMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
-	UMaterialInterface* InactiveMaterial;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
+	// UMaterialInterface* ActiveMaterial;
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
+	// UMaterialInterface* InactiveMaterial;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
 	float MovementSpeed;
@@ -41,14 +41,18 @@ public:
 	
 	virtual void Activate() override;
 
-	bool GetbCanMove() const;
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Puzzle")
+	void OnActivated();
+	
+	//bool GetbCanMove() const;
 	
 	bool GetbIsResetting() const;
 	
 	int32 GetPuzzlePieceId() const;
 
-	void Move(float DeltaTime);
+	//void Move(float DeltaTime);
 
-	void ResetMovement();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Puzzle")
+	void ResetPiece();
 	
 };

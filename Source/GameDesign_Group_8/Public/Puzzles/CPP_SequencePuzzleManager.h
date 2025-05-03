@@ -34,6 +34,7 @@ public:
 
 	virtual void CheckPuzzleState() override;
 
+	UFUNCTION(BlueprintCallable, Category = "Puzzle")
 	void ResetPuzzle();
 
 	UFUNCTION()
