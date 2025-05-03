@@ -96,6 +96,7 @@ void ACPP_SequencePuzzleManager::CheckPuzzleState()
 void ACPP_SequencePuzzleManager::ResetPuzzle()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Resetting puzzle!"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Resetting puzzle"));
 
 	PuzzlePiecesCurrent.Empty();
 	
@@ -104,7 +105,7 @@ void ACPP_SequencePuzzleManager::ResetPuzzle()
 	{
 		if (Piece)
 		{
-			Piece->ResetMovement();
+			Piece->ResetPiece();
 
 		}
 		else
@@ -122,7 +123,7 @@ void ACPP_SequencePuzzleManager::ResetPuzzle()
 void ACPP_SequencePuzzleManager::OnSequencePieceMoved(ACPP_PuzzleBase* ChangedPiece)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnSequencePieceMoved called for: %s"), *ChangedPiece->GetName());
-
+	
 	if (ACPP_SequencePuzzlePiece* MovedPiece = Cast<ACPP_SequencePuzzlePiece>(ChangedPiece))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found Moved Piece ID:%s"), *MovedPiece->GetName());

@@ -14,10 +14,10 @@ ACPP_SequencePuzzlePiece::ACPP_SequencePuzzlePiece()
 
 }
 
-bool ACPP_SequencePuzzlePiece::GetbCanMove() const
-{
-	return bCanMove;
-}
+// bool ACPP_SequencePuzzlePiece::GetbCanMove() const
+// {
+// 	return bCanMove;
+// }
 
 bool ACPP_SequencePuzzlePiece::GetbIsResetting() const
 {
@@ -29,15 +29,14 @@ int32 ACPP_SequencePuzzlePiece::GetPuzzlePieceId() const
 	return PuzzlePieceId;
 }
 
-
 void ACPP_SequencePuzzlePiece::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorTickEnabled(false);
+	//SetActorTickEnabled(false);
 
-	StaticMesh->SetMaterial(0,InactiveMaterial);
-	StartingLocation = GetActorLocation();
-	EndingLocation = StartingLocation + FVector(0.0f, 0.0f, -50.0f);
+	// StaticMesh->SetMaterial(0,InactiveMaterial);
+	// StartingLocation = GetActorLocation();
+	// EndingLocation = StartingLocation + FVector(0.0f, 0.0f, -50.0f);
 }
 
 void ACPP_SequencePuzzlePiece::Activate()
@@ -47,19 +46,27 @@ void ACPP_SequencePuzzlePiece::Activate()
 	Super::Activate();
 	if (bIsActive)
 	{
-		bCanMove = true;
-		SetActorTickEnabled(true);
+		//bCanMove = true;
+		//SetActorTickEnabled(true);
 
-		UE_LOG(LogTemp, Warning, TEXT("bCanMove set to: %d"), bCanMove);
+		//UE_LOG(LogTemp, Warning, TEXT("bCanMove set to: %d"), bCanMove);
 
 		bIsActive = false;
-		StaticMesh->SetMaterial(0, ActiveMaterial);
-		EndingLocation = GetActorLocation() + FVector(0.0f, 0.0f, -50.0f);
+		//StaticMesh->SetMaterial(0, ActiveMaterial);
+		//EndingLocation = GetActorLocation() + FVector(0.0f, 0.0f, -50.0f);
+		
+		OnActivated();
 	}
 }
 
+void ACPP_SequencePuzzlePiece::OnActivated_Implementation()
+{
+	OnStateChanged.Broadcast(this);  
+}
+
+
 //Function to move the PuzzlePiece when activated
-void ACPP_SequencePuzzlePiece::Move(float DeltaTime)
+/*void ACPP_SequencePuzzlePiece::Move(float DeltaTime)
 {
 	FVector NewPosition = FMath::VInterpTo(GetActorLocation(), EndingLocation, DeltaTime, MovementSpeed);
 	SetActorLocation(NewPosition);
@@ -84,10 +91,10 @@ void ACPP_SequencePuzzlePiece::Move(float DeltaTime)
 		}
 		
 	}
-}
+}*/
 
 
-void ACPP_SequencePuzzlePiece::ResetMovement()
+/*void ACPP_SequencePuzzlePiece::ResetMovement()
 {
 	//Check if a piece is moving and stop ResetMovement if so 
 	if (bCanMove)
@@ -110,15 +117,22 @@ void ACPP_SequencePuzzlePiece::ResetMovement()
 	
 	bIsActive = false;
 
-}
+}*/
 
+void ACPP_SequencePuzzlePiece::ResetPiece_Implementation()
+{
+	bIsActive = true;
+	//SetActorTickEnabled(true);
+
+}
+	
 
 void ACPP_SequencePuzzlePiece::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bCanMove)
-	{
-		Move(DeltaTime);
-	}
+	// if (bCanMove)
+	// {
+	// 	Move(DeltaTime);
+	// }
 
 }
