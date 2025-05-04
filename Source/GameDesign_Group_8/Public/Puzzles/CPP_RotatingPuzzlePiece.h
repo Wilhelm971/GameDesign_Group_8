@@ -48,7 +48,8 @@ public:
 	virtual void Activate() override;
 	
 	void Rotate(float DeltaTime);
-	
-	
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Puzzle")
+	void OnActivate();
 
 };

@@ -104,11 +104,11 @@ protected:
 
 
 	// Movement speed
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Movement")
 	float TorqueForce;
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Movement")
 	float MoveForce;
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Movement")
 	float ElevateForce;
 
 	UPROPERTY(EditAnywhere, Category = "PhysicsBox")
@@ -172,7 +172,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Oxygen")
 	float CurrentOxygen;
 
-	UPROPERTY(EditAnywhere, Category = "Oxygen")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Oxygen")
 	float OxygenDrainRate;
 
 public:

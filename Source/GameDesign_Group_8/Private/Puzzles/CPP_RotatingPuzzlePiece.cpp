@@ -51,6 +51,7 @@ void ACPP_RotatingPuzzlePiece::Activate()
 		TargetRotation = StartRotation + FRotator(0, RotationAmount, 0);
 		
 	}
+	
 }
 
 void ACPP_RotatingPuzzlePiece::Rotate(float DeltaTime)
@@ -74,7 +75,7 @@ void ACPP_RotatingPuzzlePiece::Rotate(float DeltaTime)
 		}
 
 		OnStateChanged.Broadcast(this);
-
+		OnActivate();
 		
 	}
 

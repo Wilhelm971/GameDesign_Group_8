@@ -75,6 +75,12 @@ void UCPP_CharacterInteractionComponent::OnInteract()
 		return;
 	}
 
+	if (!OverlappingActors.IsValidIndex(ClosestObjectIndex))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ClosestObjectIndex is invalid. Skipping interaction."));
+		return;
+	}
+	
 	if (UCPP_InteractableObjectComponent* InteractableComponent = Cast<UCPP_InteractableObjectComponent>(
 	OverlappingActors[ClosestObjectIndex]->GetComponentByClass(UCPP_InteractableObjectComponent::StaticClass())))
 	{

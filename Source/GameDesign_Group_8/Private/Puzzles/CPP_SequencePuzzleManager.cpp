@@ -81,6 +81,14 @@ void ACPP_SequencePuzzleManager::CheckPuzzleState()
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Puzzle Solved!"));
 		OnPuzzleSolved.Broadcast(); // Trigger the delegate
 		SetActorTickEnabled(false);
+		bPuzzleSolved = true;
+		
+		//Set puzzle pieces as inactive and disables Highlight materials
+		for (int32 i = 0; i < PuzzlePieces.Num(); i++)
+		{
+			PuzzlePieces[i]->SetActorTickEnabled(false);
+			PuzzlePieces[i]->bIsActive = false;
+		}
 	}
 
 	else
