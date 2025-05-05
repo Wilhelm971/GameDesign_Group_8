@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Components/SplineComponent.h"
 #include "Boid/CPP_BaseFishAI.h"
-
+#include "Components/SplineComponent.h"
 
 ACPP_BaseFishAI::ACPP_BaseFishAI()
 {
