@@ -31,7 +31,7 @@ bool UMainMenuWidget::Initialize()
 
 void UMainMenuWidget::OnStartClicked()
 {
-	UGameplayStatics::OpenLevel(this, "Prototyping");
+	UGameplayStatics::OpenLevel(this, "IntroCutsceneLevel");
 	// Open Cutscene level
 
 	
