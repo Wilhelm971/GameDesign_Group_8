@@ -41,7 +41,7 @@ public:
 	float MovementSpeed = 100.0f;
     
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FishAI")
-	float AvoidanceFactor = 5.0f;
+	float AvoidanceFactor = 0.1f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FishAI")
 	float VisionConeMultiplier = 0.5f;

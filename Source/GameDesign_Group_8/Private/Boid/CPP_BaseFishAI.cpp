@@ -125,8 +125,8 @@ void ACPP_BaseFishAI::CheckObstacles()
         {
             TimeSinceObstacleAvoidance = 0.0f;
             bObstacleDetected = true;
-            float Weight = 1.0f - (Hit.Distance / RaycastDistance);
-            AvoidanceVector += Hit.Normal * Weight;
+            //float Weight = 1.0f - (Hit.Distance / RaycastDistance);
+            AvoidanceVector = Hit.Normal;
         
             if (Hit.Distance < ClosestHitDistance)
             {
@@ -213,7 +213,12 @@ void ACPP_BaseFishAI::MoveAndRotate(float DeltaTime)
     if (!CurrentAvoidanceDirection.IsNearlyZero())
     {
         // Add avoidance force
-        MovementDirection = (MovementDirection + CurrentAvoidanceDirection * AvoidanceFactor).GetSafeNormal();
+        //MovementDirection = (MovementDirection + CurrentAvoidanceDirection * AvoidanceFactor).GetSafeNormal();
+        MovementDirection = FMath::VInterpTo(
+            MovementDirection,
+            CurrentAvoidanceDirection,
+            DeltaTime,
+            AvoidanceFactor).GetSafeNormal();
         
         // Debug visualization of resulting direction
         if (bShowDebugRays)
@@ -269,21 +274,6 @@ void ACPP_BaseFishAI::FollowSpline(float DeltaTime)
     
     // Calculate movement direction based on spline tangent
     MovementDirection = SplineTangent;
-    
-    // Optional: Debug visualization
-#if WITH_EDITOR
-    if (GetWorld()->IsPlayInEditor() && bShowDebugRays)
-    {
-        // Draw line from fish to closest spline point
-        DrawDebugLine(GetWorld(), CurrentLocation, ClosestSplinePoint, FColor::White, false, -1.0f, 0, 2.0f);
-        
-        // Draw spline tangent
-        DrawDebugLine(GetWorld(), ClosestSplinePoint, ClosestSplinePoint + SplineTangent * 100.0f, FColor::Red, false, -1.0f, 0, 2.0f);
-        
-        // Draw spline normal
-        DrawDebugLine(GetWorld(), ClosestSplinePoint, ClosestSplinePoint + SplineNormal * 100.0f, FColor::Green, false, -1.0f, 0, 2.0f);
-    }
-#endif
     
 }
 
@@ -387,6 +377,10 @@ void ACPP_BaseFishAI::FollowPlayer(float DeltaTime)
             PlayerDistance 
             );
         }
+        else
+        {
+            MovementSpeedFactor = 1.0f;
+        }
     }
     else
     {
@@ -407,6 +401,7 @@ void ACPP_BaseFishAI::Tick(float DeltaTime)
         case EFishBehaviorMode::Wander:
             
             //Handles random movement and makes the fish stay mostly level with the horizon line
+            MovementSpeedFactor = 1.0f;
             Wander(DeltaTime);
             
             break;
