@@ -77,6 +77,8 @@ void UPauseScreenWidget::OnSettingsClicked()
 		{
 			SettingsWidget -> AddToViewport();
 		}
+		SetVisibility(ESlateVisibility::Hidden);
+
 	}
 }
 
