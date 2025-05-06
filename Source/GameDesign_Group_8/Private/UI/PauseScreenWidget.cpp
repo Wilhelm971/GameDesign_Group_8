@@ -47,7 +47,6 @@ void UPauseScreenWidget::OnResumeClicked()
 			if (PlayerController)
 			{
 
-				//Player->PauseGame();
 				
 				PlayerController->SetInputMode(FInputModeGameOnly());
 				PlayerController->bShowMouseCursor = false;
@@ -64,10 +63,7 @@ void UPauseScreenWidget::OnResumeClicked()
 	}
 	
 	
-		//if (HUDWidget)
-		//{
-		//	HUDWidget->SetHUDVisibility();
-		//}
+	
 }
 
 void UPauseScreenWidget::OnSettingsClicked()

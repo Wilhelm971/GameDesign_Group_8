@@ -53,8 +53,8 @@ APlayerSubmarine::APlayerSubmarine()
 	TorqueForce = 4000000.0;
 	ElevateForce = 48000.0f;
 
-	MaxOxygen = 100.0f;
-	CurrentOxygen = 60.0f;
+	MaxOxygen = 210.0f;
+	CurrentOxygen = MaxOxygen * 0.6;
 	OxygenDrainRate = 1.2f;
 
 

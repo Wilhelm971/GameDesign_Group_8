@@ -10,6 +10,7 @@ bool UMainMenuWidget::Initialize()
 {
 	Super::Initialize();
 
+	// Runs a function when a button is clicked on
 	if (StartButton)
 	{
 		StartButton->OnClicked.AddDynamic(this, &UMainMenuWidget::OnStartClicked);
@@ -31,12 +32,9 @@ bool UMainMenuWidget::Initialize()
 void UMainMenuWidget::OnStartClicked()
 {
 	UGameplayStatics::OpenLevel(this, "Prototyping");
+	// Open Cutscene level
 
-
-
-	//TODO
-	// Switch input mode to game
-
+	
 }
 
 void UMainMenuWidget::OnSettingsClicked()
@@ -48,6 +46,7 @@ void UMainMenuWidget::OnSettingsClicked()
 		UUserWidget* SettingsWidget = CreateWidget<UUserWidget> (GetWorld(), SettingsWidgetClass);
 		if (SettingsWidget)
 		{
+			// Create a setting widget and adds it to the screen
 			SettingsWidget -> AddToViewport();
 		}
 	}
@@ -55,5 +54,6 @@ void UMainMenuWidget::OnSettingsClicked()
 
 void UMainMenuWidget::OnQuitClicked()
 {
+	// quits the game
 	UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, true);
 }
