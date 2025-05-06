@@ -17,7 +17,7 @@ class GAMEDESIGN_GROUP_8_API UMainMenuWidget : public UUserWidget
 public:
 	virtual bool Initialize() override;
 
-
+	// Functions when buttons are clicked
 	UFUNCTION()
 	void OnStartClicked();
 
@@ -28,6 +28,7 @@ public:
 	void OnQuitClicked();
 
 protected:
+	// Buttons
 	UPROPERTY(meta = (BindWidget))
 	class UButton* StartButton;
 
@@ -37,6 +38,7 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;
 
+	// Slot for Settings
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> SettingsWidgetClass;
 	

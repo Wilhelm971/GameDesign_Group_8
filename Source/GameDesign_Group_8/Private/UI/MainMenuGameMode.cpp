@@ -8,7 +8,7 @@
 void AMainMenuGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
+	// Adds the main menu widget to the screen
 	if (MainMenuWidgetClass)
 	{
 		MainMenuWidget = CreateWidget<UUserWidget>(GetWorld(), MainMenuWidgetClass);
@@ -20,9 +20,8 @@ void AMainMenuGameMode::BeginPlay()
 			APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 			if (PlayerController)
 			{
-				PlayerController->SetShowMouseCursor(true);
-				//FocusWidget HERE
-				PlayerController->SetInputMode(FInputModeUIOnly());
+				PlayerController->SetShowMouseCursor(true); // Shows mouse
+				PlayerController->SetInputMode(FInputModeUIOnly()); // Makes input mode UI
 			}
 		}
 

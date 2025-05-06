@@ -26,10 +26,7 @@ class GAMEDESIGN_GROUP_8_API AInGameHUD : public AHUD
 	UFUNCTION()
 	void UpdateShellCount(int32 Value);
 	
-
-	/*UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UUserWidget> ShellWidgetClass;
-*/
+	
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> HUDWidgetClass;
 
