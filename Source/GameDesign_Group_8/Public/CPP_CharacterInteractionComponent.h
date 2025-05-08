@@ -23,6 +23,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Highlight")
 	float HighlightTimerInterval = 0.1f;
 	
+	UPROPERTY()
+	TArray<AActor*> OverlappingActors;
+	
 	UCPP_CharacterInteractionComponent();
 	
 
@@ -48,8 +51,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void OnInteract();
 	
-	UPROPERTY()
-	TArray<AActor*> OverlappingActors;
+	
 
 };
 

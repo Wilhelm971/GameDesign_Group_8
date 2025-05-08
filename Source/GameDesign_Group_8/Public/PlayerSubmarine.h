@@ -124,15 +124,6 @@ protected:
 	// Function for interactions
 	void InteractWithObject();
 
-
-
-
-
-
-
-
-	
-
 	
 	// UI
 

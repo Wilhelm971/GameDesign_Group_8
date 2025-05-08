@@ -20,8 +20,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Puzzle Events")
 	FOnPuzzleSolved OnPuzzleSolved;
 
-	virtual void CheckPuzzleState();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,4 +29,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual void CheckPuzzleState();
+
 };

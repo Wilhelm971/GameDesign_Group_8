@@ -23,12 +23,6 @@ class GAMEDESIGN_GROUP_8_API ACPP_SequencePuzzlePiece : public ACPP_PuzzleBase
 
 public:
 	
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
-	// UMaterialInterface* ActiveMaterial;
-	//
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
-	// UMaterialInterface* InactiveMaterial;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Piece")
 	float MovementSpeed;
 	
@@ -44,13 +38,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Puzzle")
 	void OnActivated();
 	
-	//bool GetbCanMove() const;
-	
 	bool GetbIsResetting() const;
 	
 	int32 GetPuzzlePieceId() const;
-
-	//void Move(float DeltaTime);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Puzzle")
 	void ResetPiece();
