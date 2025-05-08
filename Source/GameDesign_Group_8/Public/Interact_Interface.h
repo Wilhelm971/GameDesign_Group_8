@@ -22,6 +22,8 @@ class GAMEDESIGN_GROUP_8_API IInteract_Interface
 	GENERATED_BODY()
 
 public:
+	//Declares functions that are used in the interaction system
+	
 	UFUNCTION(BlueprintNativeEvent, Category = "Interaction")
 	void OnInteract(AActor* CausingActor);
 

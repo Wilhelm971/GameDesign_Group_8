@@ -21,6 +21,7 @@ ACPP_BaseFishAI::ACPP_BaseFishAI()
     MovementSpeedFactor = 1.0f;
 
     //SPLINE TEST
+    //Not currently in use as splinemovement is unfinished
     CurrentBehaviorMode = EFishBehaviorMode::Wander;
     SplineToFollow = nullptr;
     CurrentSplineDistance += InitialSplineOffset;
@@ -34,7 +35,8 @@ ACPP_BaseFishAI::ACPP_BaseFishAI()
 void ACPP_BaseFishAI::BeginPlay()
 {
     Super::BeginPlay();
-    
+
+    //Sets up movementvector for fish
     CurrentVector = GetActorForwardVector().GetSafeNormal() * MovementSpeed;
 
     float RandomDelay = FMath::FRandRange(0.0f, 0.1f);
@@ -64,6 +66,7 @@ void ACPP_BaseFishAI::EndPlay(const EEndPlayReason::Type EndPlayReason)
     Super::EndPlay(EndPlayReason);
 }
 
+//Used to assingn spline, if spline movement was to be used
 void ACPP_BaseFishAI::SetSplineToFollow(const AActor* NewSplineActor)
 {
     if (NewSplineActor)
@@ -76,30 +79,33 @@ void ACPP_BaseFishAI::SetSplineToFollow(const AActor* NewSplineActor)
     }
 }
 
+//Main method that handles obstacle avoidance
+//Casts 5 raycasts and checks for any static objects that it should avoid, then it picks the shortes raycast, and uses the hitnormal to calculate an avoidance vector to lerp with movement vector
+//Set on a timerhandle to not call every tick
+//Also checks for players, if found it will set mode to follow player
 void ACPP_BaseFishAI::CheckObstacles()
 {
-    const float RaycastDistance = 150.0f * (MovementSpeed / 100.0f) + 100; // Scale raycast distance with speed + an initial offset
+    //Set up so raycast distance scales with speed, so the faster fish gets more reaction time to avoid
+    const float RaycastDistance = 150.0f * (MovementSpeed / 100.0f) + 100; 
     FVector CurrentLocation = GetActorLocation();
     FVector CurrentDirection = CurrentVector.GetSafeNormal();
     
     FCollisionQueryParams QueryParams;
     QueryParams.AddIgnoredActor(this); 
-    
-    // Define ray directions (forward + 4 angled rays)
+
+    //Set up ray casts by using vectors and a visionconemultiplier that can be used to increase or decrease "vision" radius of raycasts
     TArray<FVector> Directions;
     Directions.Add(CurrentDirection);
     
-    // Add angled rays (forward-left, forward-right, forward-up, forward-down)
     FVector RightVector = FVector::CrossProduct(CurrentDirection, FVector::UpVector).GetSafeNormal();
     FVector UpVector = FVector::CrossProduct(RightVector, CurrentDirection).GetSafeNormal();
 
-    //Edit VisionConeMultiplier to adjust max angle of raycasts
     Directions.Add((CurrentDirection + RightVector * VisionConeMultiplier).GetSafeNormal());
     Directions.Add((CurrentDirection - RightVector * VisionConeMultiplier).GetSafeNormal());
     Directions.Add((CurrentDirection + UpVector * VisionConeMultiplier).GetSafeNormal());
     Directions.Add((CurrentDirection - UpVector * VisionConeMultiplier).GetSafeNormal());
     
-    // Perform raycasts
+    // Performs the raycasts and checks for any objects or players
     FVector AvoidanceVector = FVector::ZeroVector;
     float ClosestHitDistance = RaycastDistance;
     bool bObstacleDetected = false;
@@ -125,7 +131,6 @@ void ACPP_BaseFishAI::CheckObstacles()
         {
             TimeSinceObstacleAvoidance = 0.0f;
             bObstacleDetected = true;
-            //float Weight = 1.0f - (Hit.Distance / RaycastDistance);
             AvoidanceVector = Hit.Normal;
         
             if (Hit.Distance < ClosestHitDistance)
@@ -133,7 +138,7 @@ void ACPP_BaseFishAI::CheckObstacles()
                 ClosestHitDistance = Hit.Distance;
             }
         
-            // Debug visualization - increased duration and thickness
+            // If Debug is checked in editor, this visualizes the raycasts that hit targets
             if (bShowDebugRays)
             {
                 DrawDebugLine(
@@ -150,7 +155,7 @@ void ACPP_BaseFishAI::CheckObstacles()
         }
         else if (bShowDebugRays)
         {
-            // Draw green rays for no hit
+            // Green rays for no hit
             DrawDebugLine(
                 GetWorld(),
                 CurrentLocation,
@@ -164,12 +169,11 @@ void ACPP_BaseFishAI::CheckObstacles()
         }
     }
     
-    // Calculate avoidance force
+    // Sets avoidance force based on proximity to object fish wants to avoid
     if (bObstacleDetected && !AvoidanceVector.IsNearlyZero())
     {
         AvoidanceVector.Normalize();
         
-        // Stronger avoidance as obstacles get closer
         float AvoidanceStrength = FMath::Clamp(1.0f - (ClosestHitDistance / RaycastDistance), 0.2f, 1.0f) * 5.0f;
         
         CurrentAvoidanceDirection = FMath::VInterpTo(
@@ -181,7 +185,7 @@ void ACPP_BaseFishAI::CheckObstacles()
         
         if (bShowDebugRays)
         {
-            // Visualize the avoidance direction
+            // Debus the direction in which the fish lerps towards when avoiding obstacles
             DrawDebugDirectionalArrow(
                 GetWorld(),
                 CurrentLocation,
@@ -197,7 +201,8 @@ void ACPP_BaseFishAI::CheckObstacles()
     }
     else
     {
-        // Gradually decays avoidance force when no obstacles are detected
+        // If no obstacles are detected the avoidance gradually stops affecting movement.
+        //Used to smooth out movement
         CurrentAvoidanceDirection = FMath::VInterpTo(
             CurrentAvoidanceDirection,
             FVector::ZeroVector,
@@ -207,44 +212,27 @@ void ACPP_BaseFishAI::CheckObstacles()
     }
 }
 
+
+//Method that handles actual movement
 void ACPP_BaseFishAI::MoveAndRotate(float DeltaTime)
 {
-    // Apply obstacle avoidance as a steering force
+    //Apply obstacle avoidance if the CurrntAvoidanceDirection is set from CheckObstacles(), else it continiues standard movement
     if (!CurrentAvoidanceDirection.IsNearlyZero())
     {
-        // Add avoidance force
-        //MovementDirection = (MovementDirection + CurrentAvoidanceDirection * AvoidanceFactor).GetSafeNormal();
+        //Add avoidance force and interpolated towards the avoidance vector 
         MovementDirection = FMath::VInterpTo(
             MovementDirection,
             CurrentAvoidanceDirection,
             DeltaTime,
             AvoidanceFactor).GetSafeNormal();
         
-        // Debug visualization of resulting direction
-        if (bShowDebugRays)
-        {
-            DrawDebugDirectionalArrow(
-                GetWorld(),
-                GetActorLocation(),
-                GetActorLocation() + MovementDirection * 100.0f,
-                20.0f,
-                FColor::Blue,
-                false,
-                0.0f,
-                0,
-                3.0f
-            );
-        }
     }
    
-    //Set new movement vector
     CurrentVector = MovementDirection * MovementSpeed * MovementSpeedFactor;
 
-    // Apply movement
     FVector NewLocation = GetActorLocation() + CurrentVector * DeltaTime;
     SetActorLocation(NewLocation);
     
-    // Update rotation to face movement direction
     if (!CurrentVector.IsNearlyZero())
     {
         FRotator NewRotation = CurrentVector.Rotation();
@@ -252,6 +240,8 @@ void ACPP_BaseFishAI::MoveAndRotate(float DeltaTime)
     }
 }
 
+//NOT IN USE ANYMORE
+//Method that was meant to set fish to follow spline
 void ACPP_BaseFishAI::FollowSpline(float DeltaTime)
 {
     if (!SplineToFollow)
@@ -262,7 +252,6 @@ void ACPP_BaseFishAI::FollowSpline(float DeltaTime)
     
     FVector CurrentLocation = GetActorLocation();
     
-    // Find the closest point on the spline to the fish's current location
     float ClosestInputKey = SplineToFollow->FindInputKeyClosestToWorldLocation(CurrentLocation);
     
     FVector ClosestSplinePoint = SplineToFollow->GetLocationAtSplineInputKey(ClosestInputKey, ESplineCoordinateSpace::World);
@@ -272,17 +261,15 @@ void ACPP_BaseFishAI::FollowSpline(float DeltaTime)
     FVector SplineNormal = FVector::CrossProduct(SplineTangent, FVector::UpVector).GetSafeNormal();
     FVector Deviation = SplineNormal * FMath::RandRange(-PathDeviation, PathDeviation);
     
-    // Calculate movement direction based on spline tangent
     MovementDirection = SplineTangent;
     
 }
 
-
+//Handles random movement and levels fish to parallel with horizon line
 void ACPP_BaseFishAI::Wander(float DeltaTime)
 {
     MovementDirection = CurrentVector.GetSafeNormal();
 
-    //Change direction if enough time has passed, with a slight randomization to waiting time
     if (((FMath::FRand() * 10.0f) + 15 < TimeSinceDirectionChange || bIsChangingDirection)) 
     {
         TimeSinceDirectionChange = 0.0f;
@@ -305,7 +292,7 @@ void ACPP_BaseFishAI::Wander(float DeltaTime)
         ).GetSafeNormal(); 
     }
 
-    //Levels fish to horizonline
+    //Levels fish to horizonline if enough time has passed after avoiding an obstacle
     if (TimeSinceObstacleAvoidance > 2.0f && !FMath::IsNearlyZero(CurrentVector.Z))
     {
         FVector ZCorrectedVector = FVector(MovementDirection.X, MovementDirection.Y, 0.0f).GetSafeNormal();
@@ -317,7 +304,6 @@ void ACPP_BaseFishAI::Wander(float DeltaTime)
        ).GetSafeNormal();
     }
 
-    // Update time counters
     TimeSinceObstacleAvoidance += DeltaTime;
     TimeSinceDirectionChange += DeltaTime;
     if (DirectionChangeTime > 1.0f)
@@ -328,13 +314,13 @@ void ACPP_BaseFishAI::Wander(float DeltaTime)
     
 }
 
-
+//Sets MovementDirection towards player character,
+//Also slows fish down if it gets to close
+//Operates on a timer where after a set time it "looses" interest and goes back to Wander() mode
 void ACPP_BaseFishAI::FollowPlayer(float DeltaTime)
 {
-    // Store current direction before applying forces
     MovementDirection = CurrentVector.GetSafeNormal();
 
-    // Follow player if true
     if (bCanFollowPlayer)
     {
         FollowPlayerTimer += DeltaTime;
@@ -360,7 +346,6 @@ void ACPP_BaseFishAI::FollowPlayer(float DeltaTime)
             7.0f
         ).GetSafeNormal();
 
-        // If followtimer runs out stop following
         if (FollowPlayerTimer > 20.0f)
         {
             MovementSpeedFactor = 1.0f;
@@ -368,7 +353,7 @@ void ACPP_BaseFishAI::FollowPlayer(float DeltaTime)
             FollowPlayerTimer = 0.0f;
         }
 
-        //Slows fish down when approaching player
+        //Sets movementspeed slower based on  proximity to character
         if ((PlayerDistance < 500.0f))
         {
             MovementSpeedFactor = FMath::GetMappedRangeValueClamped(

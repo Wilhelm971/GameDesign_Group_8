@@ -2,13 +2,8 @@
 
 
 #include "CPP_InteractableObjectComponent.h"
-
 #include "Interact_Interface.h"
-//#include "InterchangeResult.h"
-//#include "ToolWidgetsSlateTypes.h"
 #include "GameFramework/Actor.h"
-//#include "Components/SphereComponent.h"
-
 
 
 // Sets default values for this component's properties
@@ -21,6 +16,7 @@ UCPP_InteractableObjectComponent::UCPP_InteractableObjectComponent()
 
 }
 
+//Sets a desired overlay material as the material used for toggeling highlight
 void UCPP_InteractableObjectComponent::SetHighlightMaterial(UMaterialInterface* NewMaterial)
 {
 	HighlightMaterial = NewMaterial;
@@ -32,6 +28,7 @@ void UCPP_InteractableObjectComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+//Function to assign a component to detect overlap methods on, meant to be used in owning actor to assign desired scene component for overlapping
 void UCPP_InteractableObjectComponent::SetCollisionShape(UPrimitiveComponent* NewCollisionShape)
 {
 	if (NewCollisionShape)
@@ -39,15 +36,11 @@ void UCPP_InteractableObjectComponent::SetCollisionShape(UPrimitiveComponent* Ne
 		CollisionShape = NewCollisionShape;
 		CollisionShape->SetGenerateOverlapEvents(true);
 		
-		// Ignore all channels by default, and only enable overlaps for ECC_Pawn
 		CollisionShape->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		CollisionShape->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
                
-		// Optional: Set the general collision profile for debugging consistency
 		CollisionShape->SetCollisionProfileName(TEXT("Custom"));
 
-
-		// Bind dynamic events
 		CollisionShape->OnComponentBeginOverlap.AddDynamic(this, &UCPP_InteractableObjectComponent::BeginOverlap);
 		CollisionShape->OnComponentEndOverlap.AddDynamic(this, &UCPP_InteractableObjectComponent::EndOverlap);
 
@@ -60,6 +53,7 @@ void UCPP_InteractableObjectComponent::SetCollisionShape(UPrimitiveComponent* Ne
 
 }
 
+//Handles Interaction through the Interaction_Interface. If the owning object Implements Interface, then it executes OnInteract with a reference to the actor who interacted
 void UCPP_InteractableObjectComponent::Interact(AActor* InstigatorActor)
 {
 	FString DebugMessage = FString::Printf(TEXT("Interacting with: %s"), *InstigatorActor->GetName());
@@ -76,6 +70,7 @@ void UCPP_InteractableObjectComponent::Interact(AActor* InstigatorActor)
 
 }
 
+//Toggles Highligh overlay material on and off based on bool check
 void UCPP_InteractableObjectComponent::ToggleHighlight(bool bEnableHighlight)
 {
 	UMeshComponent* MeshComponent = Cast<UMeshComponent>(GetOwner()->GetComponentByClass(UMeshComponent::StaticClass()));
@@ -97,6 +92,7 @@ void UCPP_InteractableObjectComponent::ToggleHighlight(bool bEnableHighlight)
 	}
 }
 
+//If overapping actor with interface is detected, then executes overlap through the interface and passes itself as a reference to the overlapping actor
 void UCPP_InteractableObjectComponent::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
 							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
 							bool bFromSweep, const FHitResult& SweepResult)
@@ -119,6 +115,7 @@ void UCPP_InteractableObjectComponent::BeginOverlap(UPrimitiveComponent* Overlap
 	
 }
 
+//Here it does the same as in BeginOverlap, passes itself as a reference
 void UCPP_InteractableObjectComponent::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
 						  UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {

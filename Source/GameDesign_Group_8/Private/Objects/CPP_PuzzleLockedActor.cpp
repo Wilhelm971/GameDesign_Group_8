@@ -23,7 +23,7 @@ void ACPP_PuzzleLockedActor::BeginPlay()
 	Super::BeginPlay();
 
 	
-	// Bind the OpenDoor function to the OnPuzzleSolved event
+	//Binds an event to a set PuzzleManager, used to extend in blueprint and set behavior after a puzzle is solved
 	if (LinkedPuzzleManager)
 	{
 		LinkedPuzzleManager->OnPuzzleSolved.AddDynamic(this, &ACPP_PuzzleLockedActor::PuzzleSolved);

@@ -37,6 +37,7 @@ void ACPP_PickUpActor::Tick(float DeltaTime)
 
 }
 
+//Method from interface, executes on interaction
 void ACPP_PickUpActor::OnInteract_Implementation(AActor* CausingActor)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "Interacted With Object");
@@ -58,41 +59,34 @@ void ACPP_PickUpActor::OnInteract_Implementation(AActor* CausingActor)
 	}
 	
     ElapsedTime = 0.0f;
-    
 
-	// Start animation update
-	//GetWorld()->GetTimerManager().SetTimer(BounceMoveTimerHandle, this, &ACPPInteractableObject::UpdateMovementAndRotation, 0.01f, true);
-
-	// Schedule destruction
+	// Schedules destruction when object reaches character
 	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, this, &ACPP_PickUpActor::DestroyObject, Duration, false);
 
 	
 }
 
+//Method used to move to player, spin and shrink the pickup when interacted with
 void ACPP_PickUpActor::UpdateMovementAndRotation(float DeltaTime)
 {
-    // Increase time smoothly using DeltaTime
     ElapsedTime += DeltaTime;
 
-    float Alpha = FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f); // Normalize time (0 to 1)
+    float Alpha = FMath::Clamp(ElapsedTime / Duration, 0.0f, 1.0f);
 
     if (Alpha >= 1.0f)
     {
-        PrimaryActorTick.bCanEverTick = false; // Stop updating after reaching target
+        PrimaryActorTick.bCanEverTick = false; 
     }
 
-    // Smooth Lerp Movement
     FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
     float BounceOffset = BounceHeight * FMath::Sin(Alpha * PI);
     NewLocation.Z += BounceOffset;
     SetActorLocation(NewLocation);
 
-    // Rotate smoothly
-    FRotator NewRotation = GetActorRotation();
+	FRotator NewRotation = GetActorRotation();
     NewRotation.Yaw += 20;
     SetActorRotation(NewRotation);
 
-    // Smooth Size Change
     FVector NewScale = FMath::Lerp(StartSize, TargetSize, Alpha);
     SetActorScale3D(NewScale);
 }
@@ -102,6 +96,7 @@ void ACPP_PickUpActor::DestroyObject()
     Destroy();
 }
 
+//Standard idle spinning movement for pick up actor
 void ACPP_PickUpActor::IdleMovement(float DeltaTime)
 {
     ElapsedTime += DeltaTime;

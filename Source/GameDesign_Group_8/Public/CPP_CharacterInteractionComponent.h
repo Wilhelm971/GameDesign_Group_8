@@ -11,6 +11,9 @@
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class GAMEDESIGN_GROUP_8_API UCPP_CharacterInteractionComponent : public UActorComponent
 {
+
+	//Used on character to handle interaction, has an array of all interactable objects then makes the closes one interactable and highlighed
+	//This is part of the interaction system with the Interface and InteractableObjectComponent
 	GENERATED_BODY()
 
 	bool bToggleHighlightSwitch = false;

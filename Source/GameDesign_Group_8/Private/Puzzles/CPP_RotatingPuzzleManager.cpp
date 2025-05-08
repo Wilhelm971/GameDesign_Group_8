@@ -8,13 +8,6 @@ void ACPP_RotatingPuzzleManager::CheckPuzzleState()
 {
 	bool bIsSolved = true;
 
-	//Check if solution array is of same length as puzzlepieces
-	if (PuzzlePieces.Num() != PuzzlePiecesSolution.Num())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("APuzzleManager::BeginPlay - PuzzlePieces and PuzzlePiecesSolution have mismatched lengths!"));
-	}
-
-
 	// Check if puzzle pieces match the solution
 	for (int32 i = 0; i < PuzzlePieces.Num(); i++)
 	{
@@ -25,11 +18,11 @@ void ACPP_RotatingPuzzleManager::CheckPuzzleState()
 		}
 	}
 
-	// If solved, notify listeners
+	// If puzzle is solved then it notifies all actors listening to the event delegate
 	if (bIsSolved)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Puzzle Solved!"));
-		OnPuzzleSolved.Broadcast(); // Trigger the delegate
+		OnPuzzleSolved.Broadcast();
 		bPuzzleSolved = true;
 		
 		//Set puzzle pieces as inactive and disables Highlight materials
@@ -54,38 +47,26 @@ void ACPP_RotatingPuzzleManager::CheckPuzzleState()
 
 }
 
+//Checks puzzle every time a piece is interacted with
 void ACPP_RotatingPuzzleManager::OnPuzzlePieceRotated(ACPP_PuzzleBase* ChangedPiece)
 {
 	if (ACPP_RotatingPuzzlePiece* RotatingPiece = Cast<ACPP_RotatingPuzzlePiece>(ChangedPiece))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Puzzle Piece Rotated: %s"), *RotatingPiece->GetName());
-		// Call CheckPuzzleState whenever a piece's rotation changes
 		CheckPuzzleState();
 	}
 
 }
 
 
-// Sets default values
 ACPP_RotatingPuzzleManager::ACPP_RotatingPuzzleManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
-// Called when the game starts or when spawned
 void ACPP_RotatingPuzzleManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Checks that PuzzlePieces is populated
-	if (PuzzlePieces.Num() == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("APuzzleManager::BeginPlay - PuzzlePieces array is empty! Make sure to populate it in the editor."));
-	}
-
-	// Bind each puzzle piece's delegate to the CheckPuzzleState function
 	for (ACPP_RotatingPuzzlePiece* Piece : PuzzlePieces)
 	{
 		if (Piece)

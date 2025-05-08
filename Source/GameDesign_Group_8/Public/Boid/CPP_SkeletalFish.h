@@ -15,7 +15,7 @@ class GAMEDESIGN_GROUP_8_API ACPP_SkeletalFish : public ACPP_BaseFishAI
 public:    
 	ACPP_SkeletalFish();
 	
-	
+	//Used only for the BP_Eel as they use a rig with procedural animation
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FishAI")
 	USkeletalMeshComponent* FishMesh;
 };

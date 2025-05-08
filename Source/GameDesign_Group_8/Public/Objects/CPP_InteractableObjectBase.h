@@ -12,6 +12,9 @@ UCLASS()
 class GAMEDESIGN_GROUP_8_API ACPP_InteractableObjectBase : public AActor, public IInteract_Interface
 {
 	GENERATED_BODY()
+
+	//Base actor made to be extended either in blueprint or by inheritance in code.
+	//Sets up basic interaction through the interactableObjectComponent, Interact_Interface and the CharacterInteractionComponent
 	
 public:	
 	// Sets default values for this actor's properties

@@ -6,7 +6,6 @@
 // Sets default values
 ACPP_RotatingPuzzlePiece::ACPP_RotatingPuzzlePiece()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bIsRotating = false;
 	CurrentTime= 0.0f;
@@ -54,19 +53,17 @@ void ACPP_RotatingPuzzlePiece::Activate()
 	
 }
 
+//Rotates and notifyes puzzlemanager when rotation is done
 void ACPP_RotatingPuzzlePiece::Rotate(float DeltaTime)
 {
-	// Interpolate using RInterpConstantTo for constant rotation speed
 	FRotator NewRotation = FMath::RInterpConstantTo(StaticMesh->GetRelativeRotation(), TargetRotation, DeltaTime, RotationSpeed);
 
-	// Apply the new rotation
 	StaticMesh->SetRelativeRotation(NewRotation);
 
-	// Stop rotating when close enough to the target
-	if (NewRotation.Equals(TargetRotation, 1.0f)) // 1 degree tolerance
+	if (NewRotation.Equals(TargetRotation, 1.0f)) 
 	{
 		bIsRotating = false;
-		StaticMesh->SetRelativeRotation(TargetRotation); // Ensure exact match
+		StaticMesh->SetRelativeRotation(TargetRotation); 
 		RotationPosition++;
 		if (RotationPosition > RotationMaxCount-1)
 		{

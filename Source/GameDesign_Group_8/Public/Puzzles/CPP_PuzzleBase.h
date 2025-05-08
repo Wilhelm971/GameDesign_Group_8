@@ -29,7 +29,6 @@ protected:
 	UCPP_InteractableObjectComponent* InteractableObjectComponent;
 	
 public:	
-	// Sets default values for this actor's properties
 	ACPP_PuzzleBase();
 
 	UPROPERTY(BlueprintAssignable, Category = "Puzzle Events")
@@ -43,11 +42,9 @@ public:
 
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void OnInteract_Implementation(AActor* CausingActor) override;
